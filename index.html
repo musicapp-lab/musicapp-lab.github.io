@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="音程ポリス (Pitch Patrol) の公開 developer page。App Store の marketing URL、privacy URL、support URL、AdMob の app-ads.txt 運用をまとめた静的サイトです。">
+  <title>音程ポリス | Pitch Patrol</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Noto+Sans+JP:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="site-shell">
+    <header class="topbar">
+      <a class="brand" href="./index.html">
+        <span class="brand-mark">PP</span>
+        <span>音程ポリス</span>
+      </a>
+      <nav class="nav">
+        <a href="./faq.html">FAQ</a>
+        <a href="./support.html">Support</a>
+        <a href="./privacy.html">Privacy</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <p class="eyebrow">Pitch Patrol Developer Page</p>
+        <div class="hero-grid">
+          <div>
+            <h1>毎日 5 分で、音程の違和感を追いかける。</h1>
+            <p class="lede">音程ポリス (Pitch Patrol) は、吹奏楽やクラシックの学習者向けのイヤートレーニングアプリです。2 音の高低、スケールのずれ、和音のずれを、短い反復で毎日確認できます。</p>
+            <div class="cta-row">
+              <a class="button" href="./support.html">サポートを見る</a>
+              <a class="button-secondary" href="./privacy.html">プライバシーポリシー</a>
+              <a class="button-secondary" href="./faq.html">FAQ</a>
+            </div>
+            <p class="top-note">この site は App Store Connect の marketing URL と、AdMob の app-ads.txt 用 developer website を兼ねる想定です。アプリ本体のソースコードはここには載せません。</p>
+          </div>
+
+          <aside class="hero-side stack">
+            <div>
+              <p class="kicker">Current release</p>
+              <h3>広告オンリー配布</h3>
+              <ul class="mini-list">
+                <li>rewarded ad 中心、定期購入なし</li>
+                <li>アカウント作成なし、履歴は端末内保存</li>
+                <li>MusicXML は現行 build では端末内処理</li>
+              </ul>
+            </div>
+            <div>
+              <p class="kicker">Public links</p>
+              <ul class="mini-list">
+                <li><a href="./support.html">Support URL 候補</a></li>
+                <li><a href="./privacy.html">Privacy Policy URL 候補</a></li>
+                <li><a href="./app-ads.txt">app-ads.txt</a></li>
+              </ul>
+            </div>
+            <div class="fine-print">App Store の Marketing URL は root を使う想定です。Support URL は `support.html` か `faq.html` を選べます。</div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">What It Does</p>
+            <h2>トレーニングの中身</h2>
+          </div>
+          <p class="muted">band / classical learners 向けに狙いを絞った ear-training</p>
+        </div>
+        <div class="feature-grid">
+          <article class="feature-card">
+            <span class="feature-tag">Direction</span>
+            <h3>2 音の高低</h3>
+            <p>2 つ目の音が高いか低いかを短く反復して確認します。音程の方向感を毎日少しずつ固めるための基本メニューです。</p>
+          </article>
+          <article class="feature-card">
+            <span class="feature-tag">Scale</span>
+            <h3>スケール異常</h3>
+            <p>スケールの中でずれた 1 音を見つけます。音階の中での違和感を拾う耳を育てる練習です。</p>
+          </article>
+          <article class="feature-card">
+            <span class="feature-tag">Chord</span>
+            <h3>和音異常</h3>
+            <p>和音の中で低くずれた音を見つけます。合奏での濁りに気づく感覚を鍛える目的のメニューです。</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Key Features</p>
+            <h2>公開ページで案内する要点</h2>
+          </div>
+        </div>
+        <ul class="pill-list">
+          <li>楽器ごとの実用音域寄せ</li>
+          <li>A4 基準ヘルツ調整</li>
+          <li>ローカル履歴と短い結果共有</li>
+          <li>広告解除 window は 7 分共通</li>
+        </ul>
+      </section>
+
+      <section class="panel">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Site Purpose</p>
+            <h2>この GitHub Pages 移行で満たすこと</h2>
+          </div>
+        </div>
+        <div class="panel-grid">
+          <article class="info-card">
+            <h3>Marketing URL</h3>
+            <p>アプリ紹介の root page として App Store Connect の Marketing URL に使えます。</p>
+          </article>
+          <article class="info-card">
+            <h3>Support URL</h3>
+            <p>FAQ と問い合わせ導線を切り分けて、`support.html` か `faq.html` を提出用 URL にできます。</p>
+          </article>
+          <article class="info-card">
+            <h3>Privacy URL</h3>
+            <p>広告付き build 前提の privacy copy を `privacy.html` に分離して公開できます。</p>
+          </article>
+          <article class="info-card">
+            <h3>app-ads.txt</h3>
+            <p>AdMob の publisher snippet を root の `app-ads.txt` に置けます。これが Launchfy 無料版で詰まりやすい点の代替です。</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Contact</p>
+            <h2>公開連絡先</h2>
+          </div>
+        </div>
+        <p>問い合わせは公開サポートメールへ送れます。バグ報告では、端末名、iOS バージョン、build 番号、再現手順、可能ならスクリーンショットを含めてください。</p>
+        <div class="contact-strip">
+          <a href="mailto:pitchpatrolapp@gmail.com">pitchpatrolapp@gmail.com</a>
+          <span>App Store / TestFlight build info recommended</span>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <p>音程ポリス (Pitch Patrol) public developer page</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>
