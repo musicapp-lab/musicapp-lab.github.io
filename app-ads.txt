@@ -2,3 +2,4 @@
 # Example format:
 # google.com, pub-1234567890123456, DIRECT, f08c47fec0942fa0
 # Paste the real AdMob snippet below this line.
+google.com, pub-7334638360487699, DIRECT, f08c47fec0942fa0
