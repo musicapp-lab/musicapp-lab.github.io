@@ -2,706 +2,164 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>音程ポリス</title>
-  <link rel="icon" href="./favicon.svg?v=20260420-open-face-facehat-reset-packed-staff" type="image/svg+xml">
-  <link rel="icon" href="./mascot.png?v=20260420-open-face-facehat-reset-packed-staff" type="image/png" sizes="1024x1024">
-  <link rel="shortcut icon" href="./mascot.png?v=20260420-open-face-facehat-reset-packed-staff" type="image/png">
-  <link rel="apple-touch-icon" href="./mascot.png?v=20260420-open-face-facehat-reset-packed-staff" sizes="1024x1024">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="音程ポリス (Pitch Patrol) の公開 developer page。吹奏楽やクラシック学習者向けの ear-training app として、App Store の marketing URL、privacy URL、support URL、AdMob の app-ads.txt 運用をまとめた静的サイトです。">
+  <title>音程ポリス | Pitch Patrol</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Noto+Sans+JP:wght@400;500;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
-  <div class="page-shell">
-    <nav id="appTabs" class="app-tabs panel sticker-sky" aria-label="Application Tabs">
-      <button id="practiceTabButton" class="tab-button is-active" data-tab="practice">練習</button>
-      <button id="testTabButton" class="tab-button" data-tab="test">テスト</button>
-      <button id="historyTabButton" class="tab-button" data-tab="history">履歴</button>
-      <button id="settingsTabButton" class="tab-button" data-tab="settings">設定</button>
-    </nav>
+  <div class="site-shell">
+    <header class="topbar">
+      <a class="brand" href="./index.html">
+        <span class="brand-mark">PP</span>
+        <span>音程ポリス</span>
+      </a>
+      <nav class="nav">
+        <a href="./faq.html">FAQ</a>
+        <a href="./support.html">Support</a>
+        <a href="./privacy.html">Privacy</a>
+      </nav>
+    </header>
 
-    <main class="tab-main">
-      <section id="practiceScreen" class="tab-screen is-active">
-        <div class="practice-stage">
-          <section class="panel practice-session-card sticker-mint">
-            <div class="practice-session-bar">
-              <div>
-                <p id="modeEyebrow" class="eyebrow">モード</p>
-                <h2 id="modeHeading">トレーニングを選ぶ</h2>
-              </div>
+    <main>
+      <section class="hero">
+        <p class="eyebrow">Pitch Patrol Developer Page</p>
+        <div class="hero-grid">
+          <div>
+            <h1>毎日 5 分で、音程の違和感を追いかける。</h1>
+            <p class="lede">音程ポリス (Pitch Patrol) は、吹奏楽やクラシックの学習者向けのイヤートレーニングアプリです。2 音の高低、スケールのずれ、和音のずれを、短い反復で毎日確認できます。</p>
+            <p class="muted">Pitch Patrol is an ear-training app for young classical and concert-band players. It focuses on short, repeatable drills for interval direction, scale anomalies, and chord anomalies.</p>
+            <div class="cta-row">
+              <a class="button" href="./support.html">サポートを見る</a>
+              <a class="button-secondary" href="./privacy.html">プライバシーポリシー</a>
+              <a class="button-secondary" href="./faq.html">FAQ</a>
             </div>
+            <p class="top-note">この site は App Store Connect の marketing URL と、AdMob の app-ads.txt 用 developer website を兼ねる想定です。アプリ本体のソースコードはここには載せません。</p>
+            <p class="top-note">This site is intended to serve as both the App Store marketing URL and the developer website for AdMob app-ads.txt. The app source code is not published here.</p>
+          </div>
 
-            <div class="challenge-arena">
-              <div class="practice-mobile-section" data-practice-view="setup">
-                <div class="practice-session-meta">
-                  <p id="practiceQuickSettings" class="micro-copy instrument-range-copy">トランペット / A4=440Hz</p>
-                  <p id="instrumentRangeStatus" class="micro-copy instrument-range-copy">トランペット 実用域 F#3-C6 / 拡張域 E3-D6</p>
-                </div>
-
-                <div class="mode-grid" id="modeGrid">
-                  <button class="mode-card is-active" data-mode="cents">
-                    <span class="mode-emoji">🎯</span>
-                    <strong>2音の高低</strong>
-                    <span>2つ目が高いか低いかを答える</span>
-                  </button>
-                  <button class="mode-card" data-mode="scale">
-                    <span class="mode-emoji">🌈</span>
-                    <strong>Scale Detective</strong>
-                    <span>スケールの中のずれた音を見つける</span>
-                  </button>
-                  <button class="mode-card" data-mode="pure">
-                    <span class="mode-emoji">🎼</span>
-                    <strong>Chord Detective</strong>
-                    <span>和音の中でずれた音を見つける</span>
-                  </button>
-                </div>
-              </div>
-
-              <div class="practice-mobile-section is-active" data-practice-view="drill">
-                <div class="practice-question-shell">
-                  <div class="question-head">
-                    <div>
-                      <p id="challengeEyebrow" class="eyebrow">今回の問題</p>
-                      <h3 id="questionTitle">2音の高低</h3>
-                    </div>
-                    <span class="question-chip" id="questionHint">A4 付近の 2 音を聞きます</span>
-                  </div>
-                  <div id="practiceResultFeedback" class="result-feedback" aria-live="polite" aria-atomic="true">
-                    <span id="practiceResultFeedbackTitle" class="result-feedback-title"></span>
-                    <strong id="practiceResultFeedbackValue" class="result-feedback-value"></strong>
-                    <span id="practiceResultFeedbackMeta" class="result-feedback-meta"></span>
-                  </div>
-                </div>
-
-                <div class="answer-actions practice-stage-actions practice-primary-actions">
-                  <button id="playCurrentExercise" class="primary-button">再生</button>
-                  <button id="replayButton" class="ghost-button">もう一度</button>
-                  <button id="newExercise" class="secondary-button">次の問題</button>
-                </div>
-              </div>
-
-              <div id="practiceFinishSplash" class="practice-finish-splash" aria-live="polite" aria-atomic="true">
-                <span id="practiceFinishSplashLabel" class="practice-finish-splash-label"></span>
-                <strong id="practiceFinishSplashTitle" class="practice-finish-splash-title"></strong>
-                <strong id="practiceFinishSplashValue" class="practice-finish-splash-value"></strong>
-                <span id="practiceFinishSplashMeta" class="practice-finish-splash-meta"></span>
-              </div>
-            </div>
-          </section>
-
-          <section class="panel practice-stage-card score-panel sticker-sky">
-            <div class="panel-head compact-head">
-              <div>
-                <p id="scoreEyebrow" class="eyebrow">楽譜</p>
-                <h2 id="scoreHeading">練習画面の楽譜</h2>
-              </div>
-            </div>
-            <p id="practiceScoreStatus" class="micro-copy">現在の問題に対応する楽譜をここに表示します。</p>
-            <div id="phraseNotationCard" class="phrase-notation-card">
-              <div class="phrase-notation-head">
-                <div class="phrase-notation-heading">
-                  <p id="practiceScoreLabel" class="eyebrow">現在の譜面</p>
-                  <strong id="phraseNotationCaption">現在の問題の簡易譜面</strong>
-                </div>
-                <div class="phrase-notation-badges">
-                  <span id="practiceTemperamentLabel" class="small-chip is-hidden"></span>
-                  <span id="practiceTransposeLabel" class="small-chip is-hidden">In B-flat</span>
-                </div>
-              </div>
-              <p id="practiceOsmdStatus" class="micro-copy">いまの問題の楽譜をここに表示します。</p>
-              <div id="practiceOsmdContainer" class="practice-osmd-container"></div>
-              <svg id="phraseNotationSvg" class="phrase-notation-svg is-hidden" viewBox="0 0 320 160" role="img" aria-label="現在の問題の簡易譜面"></svg>
-            </div>
-          </section>
-
-          <section class="panel practice-stage-card answer-panel sticker-peach">
-            <div class="panel-head compact-head">
-              <div>
-                <p id="answerEyebrow" class="eyebrow">答え</p>
-                <h2 id="answerHeading">答える</h2>
-              </div>
-            </div>
-            <div class="answer-console-shell">
-              <div id="centsAnswerPanel" class="answer-block is-visible">
-                <div class="segment-group answer-direction-stage" id="directionButtons">
-                  <button class="segment-button" data-direction="flat">2つ目が低い</button>
-                  <button class="segment-button" data-direction="sharp">2つ目が高い</button>
-                </div>
-                <p id="intervalAnswerHint" class="micro-copy">2つ目が 1つ目より高いか低いかだけを答えます。</p>
-              </div>
-
-              <div id="pureAnswerPanel" class="answer-block">
-                <div class="note-grid" id="pureButtons"></div>
-                <div id="pureDirectionStage" class="segment-group answer-direction-stage is-hidden" aria-hidden="true">
-                  <button class="segment-button" data-pure-direction="flat">低い</button>
-                  <button class="segment-button" data-pure-direction="sharp">高い</button>
-                </div>
-                <p id="purePanelBody" class="micro-copy">順番に鳴る 3 音のうち、ずれた位置を選びます。</p>
-              </div>
-
-              <div id="scaleAnswerPanel" class="answer-block">
-                <div class="note-grid" id="scaleButtons"></div>
-                <div id="scaleDirectionStage" class="segment-group answer-direction-stage is-hidden" aria-hidden="true">
-                  <button class="segment-button" data-scale-direction="flat">低い</button>
-                  <button class="segment-button" data-scale-direction="sharp">高い</button>
-                </div>
-                <p id="scalePanelBody" class="micro-copy">今は C メジャーの固定問題です。MusicXML を読み込むと短いフレーズ練習に切り替えられます。</p>
-              </div>
-
-              <div class="submit-row is-hidden" aria-hidden="true">
-                <button id="submitAnswer" class="primary-button wide-button">こたえ合わせ</button>
-              </div>
-            </div>
-          </section>
-        </div>
-      </section>
-
-      <section id="testScreen" class="tab-screen">
-        <div class="test-stage test-overview-stage">
-          <section class="panel sticker-peach test-overview-shell">
-            <div class="panel-head compact-head test-overview-head">
-              <div>
-                <p id="testScreenEyebrow" class="eyebrow">テスト</p>
-                <h2 id="testScreenHeading">テスト</h2>
-              </div>
-              <span id="testStatus" class="small-chip">未開始</span>
-            </div>
-            <div class="test-overview-grid">
-              <div class="test-mobile-section" data-test-view="overview">
-                <article class="test-card test-control-card">
-                  <div class="test-control-row">
-                    <p id="testContentLabel" class="test-control-label">テスト選択</p>
-                    <div class="test-selection-buttons">
-                      <button id="centsTestButton" class="segment-button small-button" data-test-mode="cents" aria-pressed="false">2音</button>
-                      <button id="scaleTestButton" class="segment-button small-button is-selected" data-test-mode="scale" aria-pressed="true">スケール</button>
-                      <button id="chordTestButton" class="segment-button small-button" data-test-mode="pure" aria-pressed="false">和音</button>
-                    </div>
-                  </div>
-
-                  <div class="test-control-row">
-                    <p id="testFormatLabel" class="test-control-label">モード</p>
-                    <div id="testFormatButtons" class="test-format-buttons">
-                      <button id="fiveQuestionTestButton" class="segment-button small-button" data-test-format="five" aria-pressed="false">5問</button>
-                      <button id="tenQuestionTestButton" class="segment-button small-button is-selected" data-test-format="ten" aria-pressed="true">10問</button>
-                      <button id="streakTestButton" class="segment-button small-button" data-test-format="streak" aria-pressed="false">連続正解</button>
-                    </div>
-                  </div>
-
-                  <div class="test-control-row">
-                    <p id="testFunctionLabel" class="test-control-label">機能</p>
-                    <div class="test-function-buttons">
-                      <button id="startTestButton" class="primary-button small-button">テスト開始</button>
-                      <button id="stopTestButton" class="ghost-button small-button" disabled>やめる</button>
-                      <button id="shareTestButton" class="ghost-button small-button">共有</button>
-                    </div>
-                  </div>
-                </article>
-
-                <article class="test-overview-card">
-                  <div class="test-overview-head-row">
-                    <div>
-                      <p id="testOverviewEyebrow" class="eyebrow">概要</p>
-                      <h3 id="testOverviewName">スケールヒドラ</h3>
-                    </div>
-                    <div class="test-overview-chip-row">
-                      <span id="testOverviewModeChip" class="small-chip">スケール</span>
-                      <span id="testOverviewFormatChip" class="small-chip">10問モード</span>
-                    </div>
-                  </div>
-
-                  <p id="testBody" class="micro-copy test-overview-body">形式を選んでから、スケールか和音のテストを始めます。</p>
-
-                  <div class="test-overview-progress-track" aria-hidden="true">
-                    <span id="testOverviewProgressFill"></span>
-                  </div>
-
-                  <div id="testOverviewFeedback" class="test-overview-feedback" aria-live="polite" aria-atomic="true">
-                    <span id="testOverviewFeedbackTitle" class="test-overview-feedback-title"></span>
-                    <strong id="testOverviewFeedbackValue" class="test-overview-feedback-value"></strong>
-                    <span id="testOverviewFeedbackMeta" class="test-overview-feedback-meta"></span>
-                  </div>
-
-                  <div class="test-overview-stat-grid">
-                    <article class="test-overview-stat">
-                      <span id="testOverviewPhaseLabel">状態</span>
-                      <strong id="testOverviewPhase">待機中</strong>
-                    </article>
-                    <article class="test-overview-stat">
-                      <span id="testOverviewBestLabel">自己ベスト</span>
-                      <strong id="testOverviewBest">ベストなし</strong>
-                    </article>
-                    <article class="test-overview-stat">
-                      <span id="testOverviewRewardLabel">XP</span>
-                      <strong id="testOverviewReward">+18 XP</strong>
-                    </article>
-                  </div>
-                </article>
-              </div>
-            </div>
-          </section>
-        </div>
-      </section>
-
-      <section id="historyScreen" class="tab-screen">
-        <section class="panel progress-panel sticker-lemon">
-          <div class="panel-head compact-head">
+          <aside class="hero-side stack">
             <div>
-              <p id="progressEyebrow" class="eyebrow">Progress</p>
-              <h2 id="progressHeading">きょうの記録</h2>
+              <p class="kicker">Current release</p>
+              <h3>広告オンリー配布</h3>
+              <ul class="mini-list">
+                <li>rewarded ad 中心、定期購入なし</li>
+                <li>アカウント作成なし、履歴は端末内保存</li>
+                <li>MusicXML は現行 build では端末内処理</li>
+              </ul>
+              <p class="top-note">Ad-only release with rewarded ads, no subscription, local history, and on-device MusicXML handling in the current build.</p>
             </div>
-            <button id="shareSummary" class="secondary-button small-button">最近の実績を共有</button>
-          </div>
-
-          <div id="historyViewSwitch" class="history-view-switch segment-group" aria-label="History views">
-            <button id="historyViewSummaryButton" class="segment-button is-active" data-history-view="summary">サマリー</button>
-            <button id="historyViewActivityButton" class="segment-button" data-history-view="activity">活動</button>
-            <button id="historyViewCoachButton" class="segment-button" data-history-view="coach">分析</button>
-            <button id="historyViewBadgesButton" class="segment-button" data-history-view="badges">バッジ</button>
-            <button id="historyViewRecordsButton" class="segment-button" data-history-view="records">記録</button>
-          </div>
-
-          <div id="historySummarySection" class="history-mobile-section is-active" data-history-section="summary">
-          <div class="summary-grid">
-            <article class="mini-stat">
-              <span id="attemptCountLabel">今日の問題数</span>
-              <strong id="attemptCountValue">0</strong>
-            </article>
-            <article class="mini-stat">
-              <span id="centModeAverageLabel">2音モード 正答率</span>
-              <strong id="centModeAverageValue">0%</strong>
-            </article>
-            <article class="mini-stat">
-              <span id="pureModeAccuracyLabel">和音モード 正答率</span>
-              <strong id="pureModeAccuracyValue">0%</strong>
-            </article>
-            <article class="mini-stat">
-              <span id="scaleModeAccuracyLabel">スケールモード 正答率</span>
-              <strong id="scaleModeAccuracyValue">0%</strong>
-            </article>
-          </div>
-
-          <div class="trend-grid">
-            <article class="support-card trend-card">
-              <div class="history-head">
-                <h3 id="trendHeading">傾向</h3>
-              </div>
-              <p id="historyTrendValue" class="micro-copy"></p>
-            </article>
-            <article class="support-card trend-card">
-              <div class="history-head">
-                <h3 id="weaknessHeading">いちばん外しやすい項目</h3>
-              </div>
-              <p id="historyWeaknessValue" class="micro-copy">まだ十分な履歴がありません。</p>
-            </article>
-            <article class="support-card trend-card">
-              <div class="history-head">
-                <h3 id="historyInsightHeading">履歴インサイト</h3>
-              </div>
-              <p id="historyInsightValue" class="micro-copy"></p>
-            </article>
-          </div>
-          </div>
-
-          <div id="historyActivitySection" class="history-mobile-section" data-history-section="activity">
-          <div class="history-visual-grid">
-            <article class="support-card visual-card">
-              <div class="history-head">
-                <h3 id="historyTrendChartHeading">14 日トレンド</h3>
-                <span id="historyTrendChartValue" class="small-chip">-</span>
-              </div>
-              <svg id="historyTrendChart" class="history-trend-chart" viewBox="0 0 240 96" role="img" aria-label="直近 14 日の正答率トレンド"></svg>
-              <p id="historyTrendChartCaption" class="micro-copy">記録がたまると、ここに直近 14 日の正答率推移を表示します。</p>
-            </article>
-
-            <article class="support-card visual-card">
-              <div class="history-head">
-                <h3 id="historyCalendarHeading">練習カレンダー</h3>
-                <span id="historyCalendarValue" class="small-chip">0 / 28</span>
-              </div>
-              <div id="historyCalendar" class="history-calendar" role="list"></div>
-              <p id="historyCalendarCaption" class="micro-copy">過去 28 日の練習密度をマスで表示します。</p>
-            </article>
-          </div>
-          </div>
-
-          <div id="historyCoachSection" class="history-mobile-section" data-history-section="coach">
-          <div class="support-grid">
-            <article class="support-card xp-card">
-              <div class="history-head">
-                <h3 id="arcadeXpHeading">Arcade XP</h3>
-                <span id="arcadeXpBadge" class="small-chip">0 XP</span>
-              </div>
-              <p id="arcadeXpRank" class="micro-copy">ルーキー ティア</p>
-              <div class="xp-meter" aria-hidden="true">
-                <span id="arcadeXpFill"></span>
-              </div>
-              <p id="arcadeXpBody" class="micro-copy">あと 80 XP で次のティアです。</p>
-            </article>
-
-            <article class="support-card best-run-card">
-              <div class="history-head">
-                <h3 id="bestRunHeading">自己ベスト</h3>
-                <span id="bestRunBadge" class="small-chip">ベスト</span>
-              </div>
-              <p id="bestRunTitle" class="micro-copy">まだテストの自己ベストがありません。</p>
-              <p id="bestRunBody" class="micro-copy">5問・10問・連続正解のいずれかを完了すると、ここに最良結果を固定します。</p>
-            </article>
-
-            <article class="support-card mission-card">
-              <div class="history-head">
-                <h3 id="missionHeading">きょうのミッション</h3>
-                <span id="missionProgressBadge" class="small-chip">0 / 3</span>
-              </div>
-              <ul class="mission-list" id="missionList"></ul>
-            </article>
-
-            <article class="support-card premium-card">
-              <div class="history-head">
-                <h3 id="supporterHeading">広告アクセス</h3>
-                <span id="premiumStatusBadge" class="small-chip premium-chip">広告</span>
-              </div>
-              <p id="premiumBody" class="micro-copy">最初の広告確認は練習あと 5 回後です。解除すると 7 分間有効で、純正調切替とテスト共有にも共通で使えます。</p>
-              <div class="premium-bullets">
-                <span id="supporterBulletOne">5 回後に最初の確認</span>
-                <span id="supporterBulletTwo">解除は 7 分維持</span>
-                <span id="supporterBulletThree">純正調と共有も共通</span>
-              </div>
-              <div class="premium-actions">
-                <button id="teacherSummaryButton" class="ghost-button small-button">先生向けメモ</button>
-              </div>
-            </article>
-
-            <article class="support-card analysis-card">
-              <div class="history-head">
-                <h3 id="analysisHeading">苦手分析</h3>
-                <span id="analysisStatusBadge" class="small-chip"></span>
-              </div>
-              <p id="analysisHeadline" class="micro-copy"></p>
-              <div id="analysisChips" class="analysis-chips"></div>
-              <p id="analysisHint" class="micro-copy"></p>
-              <div id="analysisPhraseFocus" class="analysis-phrase-focus is-hidden">
-                <p id="analysisPhraseLabel" class="analysis-phrase-label">重点フレーズ</p>
-                <p id="analysisPhraseHeadline" class="analysis-phrase-headline"></p>
-                <div id="analysisPhraseChips" class="analysis-phrase-chips"></div>
-                <button id="analysisPhrasePracticeButton" class="secondary-button small-button">このフレーズで復習</button>
-              </div>
-              <div class="analysis-actions">
-                <button id="analysisPracticeButton" class="secondary-button small-button">おすすめ練習へ</button>
-              </div>
-            </article>
-          </div>
-          </div>
-
-          <div id="historyBadgesSection" class="history-mobile-section" data-history-section="badges">
-          <div class="support-grid">
-            <article class="support-card achievement-card">
-              <div class="history-head">
-                <h3 id="achievementHeading">バッジ</h3>
-                <span id="achievementStatusBadge" class="small-chip">0 / 41</span>
-              </div>
-              <p id="achievementBody" class="micro-copy">条件を達成するとバッジが解放されます。</p>
-              <div class="analysis-actions achievement-actions">
-                <button id="shareAchievementCollectionButton" class="secondary-button small-button">バッジを共有</button>
-              </div>
-              <div id="achievementBadgeList" class="achievement-badge-grid"></div>
-              <p id="achievementIconListHeading" class="achievement-icon-list-heading">カテゴリ進行</p>
-              <div id="achievementIconList" class="achievement-icon-list"></div>
-            </article>
-          </div>
-          </div>
-
-          <div id="historyRecordsSection" class="history-mobile-section" data-history-section="records">
-          <div id="historyRecordsViewSwitch" class="history-records-switch" role="group" aria-label="history record views">
-            <button id="historyRecordsPracticeButton" class="segment-button is-active" data-history-records-view="practice" aria-pressed="true">練習</button>
-            <button id="historyRecordsTestButton" class="segment-button" data-history-records-view="test" aria-pressed="false">テスト</button>
-          </div>
-          <p id="historyRecordsHint" class="micro-copy history-records-hint">練習記録とテスト記録をここで切り替えます。</p>
-          <div class="history-card history-records-card is-active" data-history-records-view="practice">
-            <div class="history-head">
-              <h3 id="historyListHeading">最近の結果</h3>
-              <button id="resetProgress" class="ghost-button danger-button">練習履歴をクリア</button>
+            <div>
+              <p class="kicker">Public links</p>
+              <ul class="mini-list">
+                <li><a href="./support.html">Support URL 候補</a></li>
+                <li><a href="./privacy.html">Privacy Policy URL 候補</a></li>
+                <li><a href="./app-ads.txt">app-ads.txt</a></li>
+              </ul>
             </div>
-            <ul id="historyList" class="history-list"></ul>
-          </div>
-
-          <div class="history-card history-records-card" data-history-records-view="test">
-            <div class="history-head">
-              <h3 id="testRunHeading">テスト履歴</h3>
-              <button id="clearTestRunsButton" class="ghost-button danger-button">テスト履歴をクリア</button>
-            </div>
-            <ul id="testRunList" class="history-list"></ul>
-          </div>
-          </div>
-        </section>
-      </section>
-
-      <section id="settingsScreen" class="tab-screen">
-        <div class="settings-grid">
-          <div id="settingsMobileViewSwitch" class="settings-mobile-view-switch segment-group" aria-label="Settings views">
-            <button id="settingsViewPracticeButton" class="segment-button is-active" data-settings-view="practice" aria-pressed="true">練習設定</button>
-            <button id="settingsViewGuideButton" class="segment-button" data-settings-view="guide" aria-pressed="false">ガイド</button>
-          </div>
-
-          <div class="settings-mobile-section is-active" data-settings-view="practice">
-            <section class="panel sticker-mint settings-panel">
-              <div class="panel-head compact-head">
-                <div>
-                  <p id="settingsEyebrow" class="eyebrow">設定</p>
-                  <h2 id="settingsHeading">練習設定</h2>
-                </div>
-              </div>
-
-              <div class="settings-stack">
-                <label class="setting-row">
-                  <span id="difficultySettingLabel">難易度</span>
-                  <select id="difficultySelect">
-                    <option value="easy">やさしい</option>
-                    <option value="medium">ふつう</option>
-                    <option value="hard">難しい</option>
-                    <option value="expert">鬼難しい</option>
-                  </select>
-                </label>
-
-                <label class="setting-row">
-                  <span id="temperamentSettingLabel">音律</span>
-                  <select id="temperamentSelect">
-                    <option value="equal">平均律</option>
-                    <option value="just">純正調</option>
-                  </select>
-                </label>
-
-                <label class="setting-row">
-                  <span id="scoreLabelModeLabel">譜面の表記</span>
-                  <div class="setting-field-stack">
-                    <select id="scoreLabelModeSelect"></select>
-                    <p id="scoreNotationHint" class="micro-copy setting-caption">推奨: In B-flat</p>
-                  </div>
-                </label>
-
-                <label class="setting-row">
-                  <span id="instrumentSettingLabel">楽器</span>
-                  <select id="instrumentSelect"></select>
-                </label>
-
-                <label class="setting-row">
-                  <span id="playbackVoiceLabel">再生音色</span>
-                  <select id="playbackVoiceSelect"></select>
-                </label>
-
-                <label class="setting-row">
-                  <span id="languageSettingLabel">言語</span>
-                  <select id="languageSelect">
-                    <option value="ja">日本語</option>
-                    <option value="en">English</option>
-                  </select>
-                </label>
-
-                <label class="setting-row setting-row-range">
-                  <span id="pitchReferenceLabel">基準ヘルツ</span>
-                  <input id="pitchReferenceInput" type="range" min="435" max="445" step="1" value="440">
-                  <strong id="pitchReferenceValue">440Hz</strong>
-                </label>
-
-                <label class="setting-row setting-row-range">
-                  <span id="playbackVolumeLabel">再生音量</span>
-                  <input id="playbackVolumeInput" type="range" min="1" max="10" step="0.5" value="5">
-                  <strong id="playbackVolumeValue">1.0倍</strong>
-                </label>
-
-                <div class="settings-save-row">
-                  <p id="settingsSaveStatus" class="micro-copy">変更内容を保存すると、次回起動時にも反映されます。</p>
-                  <button id="saveSettingsButton" class="primary-button small-button">設定を保存</button>
-                </div>
-              </div>
-            </section>
-          </div>
-
-          <div class="settings-mobile-section" data-settings-view="guide">
-            <section class="panel sticker-peach settings-panel">
-              <div class="panel-head compact-head">
-                <div>
-                  <p id="guidanceEyebrow" class="eyebrow">ガイド</p>
-                  <h2 id="guidanceHeading">チュートリアルと導線</h2>
-                </div>
-              </div>
-
-              <div class="settings-guide-list">
-                <button id="openTutorialButton" class="guide-action-row settings-card" type="button">
-                  <span class="guide-action-copy">
-                    <strong id="tutorialHeading">チュートリアル</strong>
-                    <span id="tutorialStatus" class="micro-copy">使い方で迷ったら、ここからいつでも見返せます。</span>
-                  </span>
-                  <span class="guide-action-chevron" aria-hidden="true">›</span>
-                </button>
-
-                <button id="openAdGuideButton" class="guide-action-row settings-card" type="button">
-                  <span class="guide-action-copy">
-                    <strong id="adGateHeading">広告機能</strong>
-                    <span id="adGateStatus" class="micro-copy">5 回目の実行前に最初の広告確認を出し、その後は 7 分ごとに確認します。</span>
-                  </span>
-                  <span class="guide-action-chevron" aria-hidden="true">›</span>
-                </button>
-
-                <button id="openNotificationGuideButton" class="guide-action-row settings-card" type="button">
-                  <span class="guide-action-copy">
-                    <strong id="dailyLoginReminderHeading">ログイン通知</strong>
-                    <span id="dailyLoginReminderStatus" class="micro-copy">通知の状態をここで確認します。</span>
-                  </span>
-                  <span class="guide-action-chevron" aria-hidden="true">›</span>
-                </button>
-              </div>
-            </section>
-          </div>
+            <div class="fine-print">App Store の Marketing URL は root を使う想定です。Support URL は `support.html` か `faq.html` を選べます。 The root page works well for Marketing URL, while `support.html` or `faq.html` can be used for Support URL.</div>
+          </aside>
         </div>
       </section>
+
+      <section class="panel">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">What It Does</p>
+            <h2>トレーニングの中身 / What It Does</h2>
+          </div>
+          <p class="muted">band / classical learners 向けに狙いを絞った ear-training</p>
+        </div>
+        <div class="feature-grid">
+          <article class="feature-card">
+            <span class="feature-tag">Direction</span>
+            <h3>2 音の高低 / Interval direction</h3>
+            <p>2 つ目の音が高いか低いかを短く反復して確認します。音程の方向感を毎日少しずつ固めるための基本メニューです。</p>
+            <p class="muted">Short two-note drills that train whether the second note sounds higher or lower.</p>
+          </article>
+          <article class="feature-card">
+            <span class="feature-tag">Scale</span>
+            <h3>スケール異常 / Scale anomalies</h3>
+            <p>スケールの中でずれた 1 音を見つけます。音階の中での違和感を拾う耳を育てる練習です。</p>
+            <p class="muted">Find the one note that sounds out of place inside a scale pattern.</p>
+          </article>
+          <article class="feature-card">
+            <span class="feature-tag">Chord</span>
+            <h3>和音異常 / Chord anomalies</h3>
+            <p>和音の中で低くずれた音を見つけます。合奏での濁りに気づく感覚を鍛える目的のメニューです。</p>
+            <p class="muted">Listen for the note that sags low inside a chord and learn to catch blend problems earlier.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Key Features</p>
+            <h2>公開ページで案内する要点 / Key features</h2>
+          </div>
+        </div>
+        <ul class="pill-list">
+          <li>楽器ごとの実用音域寄せ / Instrument-aware practical ranges</li>
+          <li>A4 基準ヘルツ調整 / Adjustable A4 reference pitch</li>
+          <li>ローカル履歴と短い結果共有 / Local history and lightweight result sharing</li>
+          <li>広告解除 window は 7 分共通 / One rewarded unlock covers a shared 7-minute window</li>
+        </ul>
+      </section>
+
+      <section class="panel">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Site Purpose</p>
+            <h2>この GitHub Pages 移行で満たすこと / Why this site exists</h2>
+          </div>
+        </div>
+        <div class="panel-grid">
+          <article class="info-card">
+            <h3>Marketing URL</h3>
+            <p>アプリ紹介の root page として App Store Connect の Marketing URL に使えます。</p>
+            <p class="muted">Use the root page as the public app overview linked from the App Store listing.</p>
+          </article>
+          <article class="info-card">
+            <h3>Support URL</h3>
+            <p>FAQ と問い合わせ導線を切り分けて、`support.html` か `faq.html` を提出用 URL にできます。</p>
+            <p class="muted">Choose `support.html` or `faq.html` as the review-facing support destination.</p>
+          </article>
+          <article class="info-card">
+            <h3>Privacy URL</h3>
+            <p>広告付き build 前提の privacy copy を `privacy.html` に分離して公開できます。</p>
+            <p class="muted">Keep the ad-enabled privacy explanation on its own stable public page.</p>
+          </article>
+          <article class="info-card">
+            <h3>app-ads.txt</h3>
+            <p>AdMob の publisher snippet を root の `app-ads.txt` に置けます。これが Launchfy 無料版で詰まりやすい点の代替です。</p>
+            <p class="muted">Publish the AdMob seller declaration at the host root where crawlers expect it.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Contact</p>
+            <h2>公開連絡先 / Contact</h2>
+          </div>
+        </div>
+        <p>問い合わせは公開サポートメールへ送れます。バグ報告では、端末名、iOS バージョン、build 番号、再現手順、可能ならスクリーンショットを含めてください。</p>
+        <p class="muted">For support, email the public address below and include your device model, iOS version, build number, reproduction steps, and a screenshot if possible.</p>
+        <div class="contact-strip">
+          <a href="mailto:pitchpatrolapp@gmail.com">pitchpatrolapp@gmail.com</a>
+          <span>App Store / TestFlight build info recommended</span>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <p>音程ポリス (Pitch Patrol) public developer page</p>
+      </footer>
     </main>
   </div>
-
-  <div id="resultModal" class="modal is-hidden" aria-hidden="true">
-    <div class="modal-card">
-      <div class="modal-head">
-        <div>
-          <p id="resultModalEyebrow" class="eyebrow">結果</p>
-          <h3 id="resultModalHeading">今回の結果</h3>
-        </div>
-        <button id="closeResultModalButton" class="ghost-button small-button">閉じる</button>
-      </div>
-      <section id="resultCard" class="result-card" aria-live="polite" aria-atomic="true">
-        <p id="resultEyebrow" class="eyebrow">結果</p>
-        <h3 id="resultTitle">まだ回答していません</h3>
-        <p id="resultBody" class="micro-copy">再生してから答えてみましょう。</p>
-        <div id="resultOutcomeReadout" class="result-outcome-readout is-hidden" data-tone="idle">
-          <span id="resultOutcomeReadoutLabel" class="result-outcome-readout-label"></span>
-          <strong id="resultOutcomeReadoutValue" class="result-outcome-readout-value"></strong>
-          <span id="resultOutcomeReadoutMeta" class="result-outcome-readout-meta"></span>
-        </div>
-        <p id="resultFollowupLine" class="micro-copy is-hidden"></p>
-        <div class="modal-actions">
-          <button id="resultReplayQuestionButton" class="secondary-button small-button is-hidden">問題音を再生</button>
-          <button id="resultReplayCorrectButton" class="secondary-button small-button is-hidden">正解音を再生</button>
-          <button id="resultPhrasePracticeButton" class="secondary-button small-button is-hidden">苦手フレーズへ</button>
-        </div>
-        <div class="modal-actions">
-          <button id="shareResultImageButton" class="ghost-button small-button is-hidden">画像で共有</button>
-          <button id="resultNextButton" class="primary-button small-button">つぎへ進む</button>
-        </div>
-      </section>
-    </div>
-  </div>
-
-  <div id="achievementUnlockToast" class="achievement-unlock-toast" aria-live="polite" aria-atomic="true">
-    <span id="achievementUnlockToastLabel" class="achievement-unlock-toast-label"></span>
-    <strong id="achievementUnlockToastValue" class="achievement-unlock-toast-value"></strong>
-    <span id="achievementUnlockToastMeta" class="achievement-unlock-toast-meta"></span>
-  </div>
-
-  <div id="tutorialModal" class="modal is-hidden" aria-hidden="true">
-    <div class="modal-card tutorial-modal-card">
-      <div class="tutorial-scene">
-        <div class="tutorial-mascot" aria-hidden="true">
-          <img id="tutorialMascotImage" class="tutorial-mascot-image" src="./mascot.png?v=20260420-open-face-facehat-reset-packed-staff" alt="" width="124" height="124" loading="eager" decoding="async">
-        </div>
-        <div class="tutorial-bubble">
-          <p id="tutorialModalEyebrow" class="eyebrow">使い方</p>
-          <h3 id="tutorialTitle">すぐ始められます</h3>
-          <p id="tutorialBody" class="micro-copy">まずは再生を押して、聞こえた違和感の位置を下から選びます。</p>
-        </div>
-      </div>
-      <div id="tutorialDots" class="modal-dots"></div>
-      <div class="modal-actions">
-        <button id="tutorialPrevButton" class="ghost-button small-button">もどる</button>
-        <button id="tutorialNextButton" class="primary-button small-button">つぎへ</button>
-        <button id="tutorialCloseButton" class="secondary-button small-button">閉じる</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="adGateModal" class="modal is-hidden" aria-hidden="true">
-    <div class="modal-card">
-      <p id="adGateModalEyebrow" class="eyebrow">広告確認</p>
-      <h3 id="adGateTitle">広告確認が必要です</h3>
-      <p id="adGateBody" class="micro-copy">無料利用では、5 回目以降と 7 分経過後の実行前に広告確認を行います。</p>
-      <p id="adGateCountdown" class="micro-copy"></p>
-      <p id="adGateProviderStatus" class="micro-copy ad-provider-status">広告確認を完了すると 7 分使えます。</p>
-      <div class="modal-actions">
-        <button id="watchAdButton" class="primary-button small-button">広告を見る</button>
-        <button id="closeAdGateButton" class="ghost-button small-button">あとで</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="guideInfoModal" class="modal is-hidden" aria-hidden="true">
-    <div class="modal-card guide-modal-card">
-      <p id="guideInfoEyebrow" class="eyebrow">ガイド</p>
-      <h3 id="guideInfoTitle">お知らせ</h3>
-      <p id="guideInfoBody" class="micro-copy">選んだ項目の説明をここに表示します。</p>
-      <p id="guideInfoMeta" class="micro-copy guide-modal-meta"></p>
-      <div class="modal-actions">
-        <button id="guideInfoActionButton" class="primary-button small-button is-hidden">実行</button>
-        <button id="closeGuideInfoButton" class="ghost-button small-button">閉じる</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="achievementCategoryModal" class="modal is-hidden" aria-hidden="true">
-    <div class="modal-card achievement-category-modal-card">
-      <div class="modal-head">
-        <div>
-          <p id="achievementCategoryModalEyebrow" class="eyebrow">バッジカテゴリ</p>
-          <h3 id="achievementCategoryModalHeading">練習ルート</h3>
-        </div>
-        <button id="closeAchievementCategoryModalButton" class="ghost-button small-button">閉じる</button>
-      </div>
-      <p id="achievementCategoryModalBody" class="micro-copy">カテゴリ内の全段階をここで確認します。</p>
-      <p id="achievementCategoryModalSummary" class="micro-copy achievement-category-modal-summary"></p>
-      <div id="achievementCategoryTierList" class="achievement-tier-list"></div>
-    </div>
-  </div>
-
-  <div id="setupModal" class="modal is-hidden" aria-hidden="true">
-    <div class="modal-card setup-modal-card">
-      <p id="setupEyebrow" class="eyebrow">はじめの設定</p>
-      <h3 id="setupTitle">最初に練習しやすい条件を選びましょう</h3>
-      <p id="setupBody" class="micro-copy">ここで選んだ楽器、基準ヘルツ、難易度は、あとから設定タブで変更できます。</p>
-      <div class="settings-stack setup-stack">
-        <label class="setting-row">
-          <span id="setupLanguageLabel">言語 / Language</span>
-          <select id="setupLanguageSelect">
-            <option value="ja">日本語 / Japanese</option>
-            <option value="en">English / 英語</option>
-          </select>
-        </label>
-        <label class="setting-row">
-          <span id="setupInstrumentLabel">楽器</span>
-          <select id="setupInstrumentSelect"></select>
-        </label>
-        <label class="setting-row">
-          <span id="setupDifficultyLabel">難易度</span>
-          <select id="setupDifficultySelect">
-            <option value="easy">やさしい</option>
-            <option value="medium">ふつう</option>
-            <option value="hard">難しい</option>
-            <option value="expert">鬼難しい</option>
-          </select>
-        </label>
-        <label class="setting-row setting-row-range">
-          <span id="setupPitchReferenceLabel">基準ヘルツ</span>
-          <input id="setupPitchReferenceInput" type="range" min="435" max="445" step="1" value="440">
-          <strong id="setupPitchReferenceValue">440Hz</strong>
-        </label>
-      </div>
-      <div class="modal-actions">
-        <button id="setupSaveButton" class="primary-button small-button">この設定ではじめる</button>
-      </div>
-    </div>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/soundfont-player@0.12.0/dist/soundfont-player.js"></script>
-  <script src="https://unpkg.com/opensheetmusicdisplay@1.9.5/build/opensheetmusicdisplay.min.js"></script>
-  <script src="./release-config.js"></script>
-  <script src="./release-config.local.js"></script>
-  <script type="module" src="./app.js"></script>
 </body>
 </html>
