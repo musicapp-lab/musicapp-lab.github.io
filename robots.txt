@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://musicapp-lab.github.io/sitemap.xml

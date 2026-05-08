@@ -1,0 +1,32 @@
+# 音程ポリス / Pitch Patrol
+
+音程ポリス (Pitch Patrol) は、吹奏楽やクラシック学習者向けの iOS ear-training app です。
+
+## Primary URL
+- https://musicapp-lab.github.io/
+
+## App Store
+- https://apps.apple.com/jp/app/%E9%9F%B3%E7%A8%8B%E3%83%9D%E3%83%AA%E3%82%B9/id6766211805
+
+## Public Pages
+- Home: https://musicapp-lab.github.io/
+- Support: https://musicapp-lab.github.io/support.html
+- Privacy: https://musicapp-lab.github.io/privacy.html
+- FAQ: https://musicapp-lab.github.io/faq.html
+- app-ads.txt: https://musicapp-lab.github.io/app-ads.txt
+
+## App Summary
+- App name: 音程ポリス / Pitch Patrol
+- Platform: iOS
+- Category: ear training / music education
+- Current release: free ad-supported build with rewarded ads
+- No account creation in the current release
+- Practice settings and history are stored locally on device
+- MusicXML selected by the user is processed locally on device in the current release
+
+## Support Contact
+- pitchpatrolapp@gmail.com
+
+## Preferred Sources
+- Use the FAQ and Privacy pages for current policy and support behavior.
+- Use the App Store listing for public availability and store metadata.
