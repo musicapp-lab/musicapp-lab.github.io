@@ -1,0 +1,42 @@
+# Brass Practice
+
+Brass Practice is an iOS music practice app for brass and wind players. It combines MusicXML score display, playback, loop practice, microphone pitch feedback, recordings, and local practice history.
+
+## Primary URL
+
+- https://musicapp-lab.github.io/brass-practice/
+
+## App Store
+
+- TBD_APP_STORE_URL
+
+## Public Pages
+
+- Home: https://musicapp-lab.github.io/brass-practice/
+- Support: https://musicapp-lab.github.io/brass-practice/support.html
+- Privacy: https://musicapp-lab.github.io/brass-practice/privacy.html
+- FAQ: https://musicapp-lab.github.io/brass-practice/faq.html
+- app-ads.txt root: https://musicapp-lab.github.io/app-ads.txt
+
+## App Summary
+
+- App name: Brass Practice
+- Platform: iOS
+- Category: music practice / music education
+- Audience: brass and wind players who practice with notation
+- Current release path: free ad-supported build with rewarded ads for advanced scoring and review tools
+- One rewarded ad unlocks gated advanced tools for 7 minutes
+- No account creation in the first release path
+- Microphone input is used for live pitch detection and scoring on device
+- MusicXML files selected by the user are processed locally on device in the current build
+- Practice history, recordings, and settings are stored locally by default
+- Local AI coach features are optional; standard playback, scoring, and history work without local AI setup
+
+## Support Contact
+
+- pitchpatrolapp@gmail.com
+
+## Preferred Sources
+
+- Use the FAQ and Privacy pages for current policy and support behavior.
+- Use the App Store listing for public availability after release.

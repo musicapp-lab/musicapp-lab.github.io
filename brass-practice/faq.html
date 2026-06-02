@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Brass Practice の公開 FAQ。広告解放、MusicXML、マイク、録音、iPad、ローカルAI、問い合わせ時の情報を案内します。">
+  <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
+  <meta property="og:site_name" content="Brass Practice">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Brass Practice FAQ">
+  <meta property="og:description" content="Brass Practice の公開 FAQ。広告解放、MusicXML、マイク、録音、iPad、ローカルAIについて案内します。">
+  <meta property="og:url" content="https://musicapp-lab.github.io/brass-practice/faq.html">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Brass Practice FAQ">
+  <meta name="twitter:description" content="Brass Practice のよくある質問をまとめたページです。">
+  <link rel="canonical" href="https://musicapp-lab.github.io/brass-practice/faq.html">
+  <title>Brass Practice FAQ</title>
+  <link rel="icon" href="./assets/brass-practice-icon.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "name": "Brass Practice FAQ",
+    "url": "https://musicapp-lab.github.io/brass-practice/faq.html",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "広告確認が出るタイミングは？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "高度な採点やレビュー機能をオンにするとき、7分の解放 window が切れていれば報酬広告の確認が出ます。基本の楽譜表示、再生、ライブ音程表示は広告なしでも使えます。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "MusicXML は送信されますか？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "現在の build では、ユーザーが選んだ MusicXML は端末内で楽譜表示と再生のために処理されます。開発者専用サーバへアップロードする実装はありません。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "マイク入力は何に使いますか？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "マイク入力はライブ音程検出と採点に使います。音声を開発者サーバへ送信する実装はありません。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "ローカルAIは必須ですか？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "必須ではありません。ローカルAIコーチは任意機能で、未設定でも通常の再生、採点、履歴は動作します。"
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="./index.html">
+        <img class="brand-mark" src="./assets/brass-practice-icon.png" alt="" width="36" height="36">
+        <span>Brass Practice</span>
+      </a>
+      <nav class="nav" aria-label="Primary">
+        <a href="./index.html">Home</a>
+        <a href="./support.html">Support</a>
+        <a href="./privacy.html">Privacy</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <div class="section-inner">
+        <p class="eyebrow">FAQ</p>
+        <h1>よくある質問</h1>
+        <p class="lede">App Store Connect の Support URL から参照されることを想定して、広告、マイク、MusicXML、録音、iPad、ローカルAIを日本語と英語でまとめています。</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-inner faq-stack">
+        <article class="faq-item">
+          <h3>広告確認が出るタイミングは？</h3>
+          <div class="faq-grid">
+            <div class="lang-card">
+              <span class="lang-label">JA</span>
+              <p>高度な採点やレビュー機能をオンにするとき、7分の解放 window が切れていれば報酬広告の確認が出ます。基本の楽譜表示、再生、ライブ音程表示は広告なしでも使えます。</p>
+            </div>
+            <div class="lang-card">
+              <span class="lang-label">EN</span>
+              <p>When you enable advanced scoring or review tools, the app may ask for one rewarded ad if the 7-minute unlock window has expired. Core notation, playback, and live pitch feedback remain available without ads.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="faq-item">
+          <h3>MusicXML は送信されますか？</h3>
+          <div class="faq-grid">
+            <div class="lang-card">
+              <span class="lang-label">JA</span>
+              <p>現在の build では、ユーザーが選んだ MusicXML は端末内で楽譜表示と再生のために処理されます。開発者専用サーバへアップロードする実装はありません。</p>
+            </div>
+            <div class="lang-card">
+              <span class="lang-label">EN</span>
+              <p>In the current build, MusicXML files you choose are processed locally on the device for notation and playback. There is no developer-server upload for those files.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="faq-item">
+          <h3>マイク入力は何に使いますか？</h3>
+          <div class="faq-grid">
+            <div class="lang-card">
+              <span class="lang-label">JA</span>
+              <p>マイク入力はライブ音程検出と採点に使います。音声を開発者サーバへ送信する実装はありません。マイクが反応しない場合は OS 設定で Brass Practice のマイク許可を確認してください。</p>
+            </div>
+            <div class="lang-card">
+              <span class="lang-label">EN</span>
+              <p>Microphone input is used for live pitch detection and scoring. The app does not upload microphone audio to a developer server. If input does not respond, check microphone permission for Brass Practice in OS settings.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="faq-item">
+          <h3>録音はどこに保存されますか？</h3>
+          <div class="faq-grid">
+            <div class="lang-card">
+              <span class="lang-label">JA</span>
+              <p>ユーザーが録音を開始した場合、録音は端末内で保存・再生・書き出しに使います。共有、書き出し、サポート送付を選んだ場合だけ、その選択した内容が外部へ渡ります。</p>
+            </div>
+            <div class="lang-card">
+              <span class="lang-label">EN</span>
+              <p>When you start recording, recordings are kept on the device for playback, storage, or export. Content leaves the device only when you explicitly share, export, or send it for support.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="faq-item">
+          <h3>ローカルAIは必須ですか？</h3>
+          <div class="faq-grid">
+            <div class="lang-card">
+              <span class="lang-label">JA</span>
+              <p>必須ではありません。ローカルAIコーチは任意機能で、未設定でも通常の再生、採点、履歴は動作します。モデルのダウンロードやローカルサーバー利用は、選んだ方式に応じて処理場所が変わります。</p>
+            </div>
+            <div class="lang-card">
+              <span class="lang-label">EN</span>
+              <p>No. Local AI coach features are optional. Standard playback, scoring, and history work without local AI setup. If you choose a model download or local server, processing depends on that selected provider.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="faq-item">
+          <h3>iPad でも使えますか？</h3>
+          <div class="faq-grid">
+            <div class="lang-card">
+              <span class="lang-label">JA</span>
+              <p>iPad レイアウトはリリース前検証の対象です。App Store での最終対応表示は、提出 build と App Store Connect のデバイス設定に従います。</p>
+            </div>
+            <div class="lang-card">
+              <span class="lang-label">EN</span>
+              <p>iPad layout is part of the release verification. Final App Store device availability depends on the submitted build and App Store Connect device settings.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="faq-item">
+          <h3>問い合わせ時に何を書けばよいですか？</h3>
+          <div class="faq-grid">
+            <div class="lang-card">
+              <span class="lang-label">JA</span>
+              <p>端末名、iOS バージョン、App Store または TestFlight の build 番号、再現手順、表示されたエラー、可能ならスクリーンショットを送ってください。</p>
+            </div>
+            <div class="lang-card">
+              <span class="lang-label">EN</span>
+              <p>Please include your device model, iOS version, App Store or TestFlight build number, steps to reproduce, visible errors, and a screenshot if possible.</p>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <p>Support contact: <a href="mailto:pitchpatrolapp@gmail.com">pitchpatrolapp@gmail.com</a></p>
+      <p><a href="./support.html">Support</a> / <a href="./privacy.html">Privacy Policy</a></p>
+    </div>
+  </footer>
+</body>
+</html>
