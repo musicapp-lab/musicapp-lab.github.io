@@ -6,10 +6,6 @@ Brass Practice is an iOS music practice app for brass and wind players. It combi
 
 - https://musicapp-lab.github.io/brass-practice/
 
-## App Store
-
-- TBD_APP_STORE_URL
-
 ## Public Pages
 
 - Home: https://musicapp-lab.github.io/brass-practice/
@@ -39,4 +35,4 @@ Brass Practice is an iOS music practice app for brass and wind players. It combi
 ## Preferred Sources
 
 - Use the FAQ and Privacy pages for current policy and support behavior.
-- Use the App Store listing for public availability after release.
+- Use the public pages above for current availability, support, and privacy details.
