@@ -1,42 +1,37 @@
-# Brass Practice
+# 音程ポリス / Pitch Patrol
 
-Brass Practice is an iOS music practice app for brass and wind players. It combines MusicXML score display, playback, loop practice, microphone pitch feedback, recordings, and local practice history.
+音程ポリス (Pitch Patrol) は、吹奏楽やクラシック学習者向けの iOS ear-training app です。
 
 ## Primary URL
-
-- https://musicapp-lab.github.io/brass-practice/
+- https://musicapp-lab.github.io/
 
 ## App Store
-
-- TBD_APP_STORE_URL
+- https://apps.apple.com/jp/app/%E9%9F%B3%E7%A8%8B%E3%83%9D%E3%83%AA%E3%82%B9/id6766211805
 
 ## Public Pages
-
-- Home: https://musicapp-lab.github.io/brass-practice/
-- Support: https://musicapp-lab.github.io/brass-practice/support.html
-- Privacy: https://musicapp-lab.github.io/brass-practice/privacy.html
-- FAQ: https://musicapp-lab.github.io/brass-practice/faq.html
-- app-ads.txt root: https://musicapp-lab.github.io/app-ads.txt
+- Home: https://musicapp-lab.github.io/
+- Support: https://musicapp-lab.github.io/support.html
+- Privacy: https://musicapp-lab.github.io/privacy.html
+- FAQ: https://musicapp-lab.github.io/faq.html
+- app-ads.txt: https://musicapp-lab.github.io/app-ads.txt
 
 ## App Summary
-
-- App name: Brass Practice
+- App name: 音程ポリス / Pitch Patrol
 - Platform: iOS
-- Category: music practice / music education
-- Audience: brass and wind players who practice with notation
-- Current release path: free ad-supported build with rewarded ads for advanced scoring and review tools
-- One rewarded ad unlocks gated advanced tools for 7 minutes
-- No account creation in the first release path
-- Microphone input is used for live pitch detection and scoring on device
-- MusicXML files selected by the user are processed locally on device in the current build
-- Practice history, recordings, and settings are stored locally by default
-- Local AI coach features are optional; standard playback, scoring, and history work without local AI setup
+- Category: ear training / music education
+- Current release: free ad-supported build with rewarded ads
+- No account creation in the current release
+- Practice settings and history are stored locally on device
+- MusicXML selected by the user is processed locally on device in the current release
 
 ## Support Contact
-
 - pitchpatrolapp@gmail.com
 
 ## Preferred Sources
-
 - Use the FAQ and Privacy pages for current policy and support behavior.
-- Use the App Store listing for public availability after release.
+- Use the App Store listing for public availability and store metadata.
+
+## Related Apps On This Site
+- Brass Practice: https://musicapp-lab.github.io/brass-practice/
+- Brass Practice Support: https://musicapp-lab.github.io/brass-practice/support.html
+- Brass Practice Privacy: https://musicapp-lab.github.io/brass-practice/privacy.html
