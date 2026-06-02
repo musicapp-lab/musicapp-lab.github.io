@@ -1,1220 +1,246 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="utf-8" />
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <title>Brass Practice</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Ccircle cx=%2732%27 cy=%2732%27 r=%2730%27 fill=%27%230b5cab%27/%3E%3Cpath d=%27M22 17h10c12 0 19 5 19 15s-7 15-19 15h-4v10h-6V17zm6 6v18h4c9 0 13-2 13-9s-4-9-13-9h-4z%27 fill=%27white%27/%3E%3C/svg%3E">
-  <style>
-    html {
-      box-sizing: border-box;
-      --app-font-family: "HiraginoSans-W3", "Hiragino Sans", "HiraKakuProN-W3", "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, "Noto Sans JP", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-    }
-    *, *::before, *::after {
-      box-sizing: inherit;
-    }
-    button,
-    input,
-    select,
-    textarea {
-      font-family: var(--app-font-family);
-    }
-    body,
-    body * {
-      font-family: var(--app-font-family);
-    }
-    body {
-      --app-shell-gutter: 16px;
-      --bottom-ad-banner-space: 66px;
-      --bottom-ad-space: 0px;
-      --pinned-nav-height: 0px;
-      font-family: var(--app-font-family);
-      margin: 0;
-      padding: var(--app-shell-gutter);
-      padding-top: calc(var(--app-shell-gutter) + env(safe-area-inset-top, 0px));
-      padding-bottom: calc(var(--app-shell-gutter) + var(--bottom-ad-space) + env(safe-area-inset-bottom, 0px));
-      padding-left: calc(var(--app-shell-gutter) + env(safe-area-inset-left, 0px));
-      padding-right: calc(var(--app-shell-gutter) + env(safe-area-inset-right, 0px));
-      overflow-x: hidden;
-      background: #f5f7fb;
-      color: #0f172a;
-    }
-    body.bottom-ad-banner-reserved {
-      --bottom-ad-space: var(--bottom-ad-banner-space);
-    }
-    #controls { display:flex; flex-direction:column; gap:6px; margin-bottom:4px; }
-    #scoreContainer { position:relative; height: 55vh; overflow:auto; border:1px solid #ddd; padding:2px; }
-    @media (min-width: 768px) {
-      #scoreContainer { height: 65vh; padding:8px; }
-    }
-    button { padding:6px 10px }
-    button:not(.nav-btn):not(.view-btn):not(.tool-btn) {
-      transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
-    }
-    button:not(.nav-btn):not(.view-btn):not(.tool-btn):not(:disabled) {
-      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.12);
-    }
-    button:not(.nav-btn):not(.view-btn):not(.tool-btn):not(:disabled):active {
-      transform: translateY(1px);
-    }
-    button:disabled {
-      cursor: not-allowed;
-      opacity: 0.6;
-      filter: saturate(0.85);
-    }
-    input[type=range] { width:120px }
-    #status { display:none !important; margin-left:10px; color:#555 }
-    #annotationCanvas, #annotationToolbar { display:none !important; }
-
-    /* Loading spinner */
-    .loading-spinner {
-      display: inline-block;
-      width: 16px;
-      height: 16px;
-      border: 2px solid #f3f3f3;
-      border-top: 2px solid #0066cc;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin-left: 8px;
-      vertical-align: middle;
-    }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    /* Smooth transitions */
-    #scoreDisplay, #feedbackDisplay {
-      transition: opacity 0.3s ease;
-    }
-    #pitchMeter {
-      background:
-        linear-gradient(90deg,
-          rgba(239, 68, 68, 0.12) 0%,
-          rgba(239, 68, 68, 0.12) 25%,
-          rgba(250, 204, 21, 0.18) 25%,
-          rgba(250, 204, 21, 0.18) 40%,
-          rgba(34, 197, 94, 0.18) 40%,
-          rgba(34, 197, 94, 0.18) 60%,
-          rgba(250, 204, 21, 0.18) 60%,
-          rgba(250, 204, 21, 0.18) 75%,
-          rgba(239, 68, 68, 0.12) 75%,
-          rgba(239, 68, 68, 0.12) 100%),
-        linear-gradient(90deg, transparent calc(50% - 1px), #111827 calc(50% - 1px), #111827 calc(50% + 1px), transparent calc(50% + 1px));
-      background-color: #f8fafc;
-    }
-
-    /* Toggle switch (mobile-friendly) */
-    .toggle-switch {
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
-      user-select: none;
-    }
-    .toggle-switch input { display: none; }
-    .toggle-track {
-      width: 48px;
-      height: 26px;
-      background: #ccc;
-      border-radius: 13px;
-      position: relative;
-      transition: background 0.25s;
-      flex-shrink: 0;
-    }
-    .toggle-track::after {
-      content: '';
-      position: absolute;
-      top: 3px;
-      left: 3px;
-      width: 20px;
-      height: 20px;
-      background: #fff;
-      border-radius: 50%;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-      transition: transform 0.25s;
-    }
-    .toggle-switch input:checked + .toggle-track {
-      background: #4CAF50;
-    }
-    .toggle-switch input:checked + .toggle-track::after {
-      transform: translateX(22px);
-    }
-    .toggle-label {
-      font-size: 14px;
-      font-weight: 500;
-      color: #333;
-    }
-
-    /* Tempo buttons (mobile-friendly) */
-    .tempo-btn {
-      width: 36px;
-      height: 36px;
-      border: 1px solid #ccc;
-      border-radius: 50%;
-      background: #f5f5f5;
-      font-size: 18px;
-      font-weight: bold;
-      color: #333;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      -webkit-tap-highlight-color: transparent;
-      user-select: none;
-      transition: background 0.15s;
-    }
-    .tempo-btn:active {
-      background: #0066cc;
-      color: #fff;
-      border-color: #0066cc;
-    }
-    .tempo-btn-large {
-      width: 32px;
-      height: 32px;
-      font-size: 14px;
-      color: #666;
-    }
-    .practice-guide-button {
-      width: 36px;
-      height: 36px;
-      padding: 0;
-      border: none;
-      border-radius: 999px;
-      background: #0f172a;
-      color: #fff;
-      font-size: 18px;
-      font-weight: 900;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .practice-guide-panel {
-      display: none;
-      margin-top: 8px;
-      padding: 10px;
-      border: 1px solid #bfdbfe;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #eff6ff, #f8fafc);
-      box-shadow: 0 12px 26px rgba(15,23,42,0.08);
-    }
-    .practice-guide-panel.is-open {
-      display: block;
-    }
-    .practice-guide-header {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 8px;
-    }
-    .practice-guide-title {
-      display: grid;
-      gap: 3px;
-      color: #0f172a;
-    }
-    .practice-guide-title span {
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      color: #1d4ed8;
-    }
-    .practice-guide-title strong {
-      font-size: 14px;
-      line-height: 1.35;
-    }
-    .practice-guide-close {
-      flex: 0 0 auto;
-      width: 28px;
-      height: 28px;
-      padding: 0;
-      border: 1px solid #bfdbfe;
-      border-radius: 999px;
-      background: #fff;
-      color: #1d4ed8;
-      font-weight: 900;
-      cursor: pointer;
-    }
-    .practice-guide-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 8px;
-    }
-    .practice-guide-item {
-      display: grid;
-      grid-template-columns: auto 1fr;
-      gap: 8px;
-      align-items: start;
-      padding: 8px;
-      border: 1px solid #dbeafe;
-      border-radius: 10px;
-      background: rgba(255,255,255,0.84);
-    }
-    .practice-guide-key {
-      display: inline-flex;
-      min-width: 44px;
-      justify-content: center;
-      padding: 3px 7px;
-      border-radius: 999px;
-      background: #dbeafe;
-      color: #1d4ed8;
-      font-size: 11px;
-      font-weight: 900;
-      white-space: nowrap;
-    }
-    .practice-guide-copy {
-      display: grid;
-      gap: 2px;
-      min-width: 0;
-    }
-    .practice-guide-copy strong {
-      font-size: 12px;
-      color: #0f172a;
-      line-height: 1.3;
-    }
-    .practice-guide-copy span {
-      font-size: 11px;
-      line-height: 1.35;
-      color: #475569;
-    }
-
-    /* Navigation Bar */
-    #navbar {
-      display: grid;
-      grid-template-columns: repeat(6, minmax(0, 1fr));
-      gap: 4px;
-      padding: 4px;
-      margin: 0 0 16px 0;
-      border-radius: 16px;
-      background: linear-gradient(135deg, #1d4ed8 0%, #0f766e 100%);
-      box-shadow: 0 16px 36px rgba(15,23,42,0.14);
-    }
-    body.score-toolbar-pinned {
-      padding-bottom: calc(var(--app-shell-gutter) + var(--bottom-ad-space) + var(--pinned-nav-height) + 16px + env(safe-area-inset-bottom, 0px));
-    }
-    #navbarSpacer {
-      display: none;
-      height: 0;
-    }
-    .nav-btn {
-      min-width: 0;
-      min-height: 48px;
-      padding: 8px 6px;
-      background: transparent;
-      border: none;
-      border-radius: 14px;
-      color: white;
-      font-size: 12px;
-      font-weight: 700;
-      line-height: 1.15;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      border-bottom: 3px solid transparent;
-    }
-    .nav-btn:hover {
-      background: rgba(255,255,255,0.1);
-    }
-    .nav-btn.active {
-      background: rgba(255,255,255,0.2);
-      border-bottom-color: #fff;
-    }
-    .view-btn {
-      width: 28px; height: 24px; padding: 0; font-size: 14px;
-      background: transparent; border: none; cursor: pointer;
-      opacity: 0.6;
-    }
-    .view-btn.active {
-      background: #e0e0e0;
-      opacity: 1;
-    }
-    .focus-btn.active {
-      background: #e0e7ff;
-      border-color: #6366f1;
-      color: #312e81;
-    }
-    .tool-btn {
-      width: 32px; height: 32px; padding: 0; font-size: 16px;
-      background: #fff; border: 1px solid #ccc; cursor: pointer; border-radius: 4px;
-    }
-    .tool-btn.active {
-      background: #0066cc;
-      color: white;
-      border-color: #005cbf;
-    }
-    #appContainer {
-      min-height: 80vh;
-    }
-    .practice-assist-rail {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 10px;
-      margin-bottom: 10px;
-      align-items: stretch;
-    }
-    .practice-assist-rail:empty {
-      display: none;
-    }
-    .practice-assist-card {
-      min-height: 0;
-    }
-    .practice-assist-card > summary,
-    .practice-assist-card details > summary {
-      list-style: none;
-    }
-    .practice-assist-card > summary::-webkit-details-marker,
-    .practice-assist-card details > summary::-webkit-details-marker {
-      display: none;
-    }
-    .practice-assist-card > summary:focus-visible,
-    .practice-assist-card details > summary:focus-visible {
-      outline: 2px solid #2563eb;
-      outline-offset: -2px;
-    }
-    .music-card:hover,
-    .music-card:focus-visible {
-      transform: translateY(-1px);
-      border-color: #93c5fd !important;
-      box-shadow: 0 14px 30px rgba(29, 78, 216, 0.12) !important;
-      outline: none;
-    }
-    .interactive-surface {
-      position: relative;
-      transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
-      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
-    }
-    .interactive-surface:hover,
-    .interactive-surface:focus-visible {
-      transform: translateY(-1px);
-      box-shadow: 0 16px 34px rgba(15, 23, 42, 0.12);
-      outline: 2px solid rgba(59, 130, 246, 0.24);
-      outline-offset: 2px;
-    }
-    .interactive-surface:active {
-      transform: translateY(1px);
-    }
-    .interactive-surface[aria-pressed="true"],
-    .interactive-surface.is-active {
-      box-shadow: 0 16px 34px rgba(37, 99, 235, 0.14);
-    }
-    .interactive-preview-shell {
-      transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
-    }
-    .interactive-preview-shell.is-ready {
-      border-style: solid !important;
-      border-color: #60a5fa !important;
-      box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.18), 0 16px 32px rgba(15, 23, 42, 0.1);
-      background: linear-gradient(180deg, #eff6ff, #dbeafe) !important;
-    }
-    .interactive-preview-shell.is-ready:hover {
-      border-color: #2563eb !important;
-    }
-    html, body {
-      -webkit-text-size-adjust: 100%;
-      text-size-adjust: 100%;
-    }
-    .toggle-label {
-      white-space: nowrap;
-    }
-    .nav-btn {
-      white-space: normal;
-      word-break: keep-all;
-    }
-    .view-btn {
-      min-width: 3.8em;
-      width: auto;
-      height: 24px;
-      padding: 0 6px;
-      font-size: 12px;
-      white-space: nowrap;
-      flex: 0 0 auto;
-    }
-    #scoreToolbar {
-      flex-wrap: nowrap;
-      overflow-x: auto;
-      overflow-y: hidden;
-      scrollbar-width: none;
-      -webkit-overflow-scrolling: touch;
-    }
-    body.score-toolbar-pinned #navbar {
-      position: fixed;
-      bottom: calc(var(--bottom-ad-space) + env(safe-area-inset-bottom, 0px) + 8px);
-      left: calc(env(safe-area-inset-left, 0px) + var(--app-shell-gutter));
-      right: calc(env(safe-area-inset-right, 0px) + var(--app-shell-gutter));
-      margin: 0;
-      z-index: 80;
-      box-shadow: 0 -16px 36px rgba(15,23,42,0.18);
-      backdrop-filter: blur(10px);
-    }
-    body.score-toolbar-pinned #navbarSpacer {
-      display: none !important;
-    }
-    #scoreToolbar::-webkit-scrollbar {
-      display: none;
-    }
-    #viewControls {
-      flex: 0 0 auto;
-    }
-    @media (max-width: 420px) {
-      .nav-btn {
-        min-height: 44px;
-        padding: 7px 4px;
-        font-size: 11px;
-      }
-      .view-btn {
-        min-width: 3.4em;
-        padding: 0 4px;
-        font-size: 11px;
-      }
-      #scoreFocusToggle {
-        padding: 0 6px;
-        font-size: 11px;
-        white-space: nowrap;
-        flex: 0 0 auto;
-      }
-      #notationLabel {
-        font-size: 10px;
-        padding: 1px 4px;
-      }
-    }
-    #performanceSummary {
-      max-width: 980px;
-      width: 100%;
-      box-sizing: border-box;
-      margin: 20px auto 0;
-      background: linear-gradient(180deg, #f8fbff 0%, #eef6ff 100%) !important;
-      border: 1px solid #bfdbfe !important;
-      border-radius: 18px !important;
-      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
-    }
-    .practice-summary-metrics {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-    }
-    .practice-summary-card {
-      box-sizing: border-box;
-      padding: 14px;
-      border-radius: 14px;
-      background: rgba(255,255,255,0.72);
-      border: 1px solid rgba(148, 163, 184, 0.25);
-      backdrop-filter: blur(4px);
-    }
-    .practice-chip-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-    .practice-mini-chart {
-      display: grid;
-      gap: 10px;
-      margin-top: 12px;
-    }
-    .practice-context-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 12px;
-    }
-    #practiceNextStepActions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 12px;
-    }
-    .history-screen {
-      box-sizing: border-box;
-      padding: 20px;
-    }
-    .library-action-strip,
-    .library-lane-strip,
-    .history-insight-strip {
-      display: grid;
-      grid-auto-flow: column;
-      gap: 10px;
-      overflow-x: auto;
-      padding-bottom: 4px;
-      scroll-snap-type: x proximity;
-      scrollbar-width: thin;
-      -webkit-overflow-scrolling: touch;
-    }
-    .library-action-strip {
-      grid-auto-columns: minmax(260px, 88%);
-      margin-top: 10px;
-    }
-    .library-lane-strip {
-      grid-auto-columns: minmax(280px, 84%);
-      margin-top: 12px;
-    }
-    .history-insight-strip {
-      grid-auto-columns: minmax(260px, 86%);
-      margin-top: 12px;
-    }
-    .library-action-strip > section,
-    .library-action-strip > details,
-    .library-lane-strip > section,
-    .history-insight-strip > section {
-      margin-top: 0 !important;
-      scroll-snap-align: start;
-    }
-    .library-scroll-list {
-      max-height: min(720px, 58vh);
-      overflow: auto;
-      padding-right: 2px;
-    }
-    .history-summary-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 10px;
-      margin-top: 16px;
-    }
-    .history-table-wrap {
-      box-sizing: border-box;
-      overflow-x: auto;
-      margin-top: 16px;
-      border: 1px solid #dbe4f0;
-      border-radius: 14px;
-      background: #fff;
-      box-shadow: 0 10px 24px rgba(15,23,42,0.04);
-      max-height: min(680px, 48vh);
-      overflow: auto;
-    }
-    .history-table {
-      width: 100%;
-      min-width: 640px;
-      border-collapse: collapse;
-    }
-    .history-table thead th {
-      position: sticky;
-      top: 0;
-      z-index: 1;
-    }
-    @media (min-width: 768px) and (max-width: 1100px) {
-      #performanceSummary {
-        padding: 24px !important;
-      }
-      .practice-summary-metrics {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
-      .library-action-strip {
-        grid-auto-columns: minmax(300px, 42%);
-      }
-      .library-lane-strip,
-      .history-insight-strip {
-        grid-auto-columns: minmax(330px, 44%);
-      }
-      .library-scroll-list {
-        max-height: min(760px, 62vh);
-      }
-      .history-summary-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-    }
-    body[data-device-tier="tablet"] #performanceSummary {
-      padding: 24px !important;
-    }
-    body[data-device-tier="tablet"] .practice-summary-metrics {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-    body[data-device-tier="tablet"] .practice-context-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-    body[data-device-tier="tablet"] .history-summary-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-    @media (max-width: 767px) {
-      body {
-        --app-shell-gutter: 12px;
-        padding-left: calc(var(--app-shell-gutter) + env(safe-area-inset-left, 0px));
-        padding-right: calc(var(--app-shell-gutter) + env(safe-area-inset-right, 0px));
-      }
-      #performanceSummary {
-        padding: 16px !important;
-        border-radius: 16px !important;
-      }
-      .practice-summary-metrics {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-      .practice-context-grid {
-        grid-template-columns: 1fr;
-      }
-      #practiceTakeComparisonTitle,
-      #practiceConfidenceTitle {
-        font-size: 15px !important;
-      }
-      #practiceNextStepTitle {
-        font-size: 16px !important;
-      }
-      #practiceNextStepActions > button {
-        flex: 1 1 100%;
-        width: 100%;
-        justify-content: center;
-      }
-      .history-screen {
-        padding: 16px 12px;
-      }
-      .history-summary-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-      .history-table {
-        min-width: 560px;
-      }
-      .practice-assist-rail {
-        grid-template-columns: 1fr;
-        gap: 8px;
-        margin-bottom: 8px;
-      }
-    }
-    body[data-device-tier="phone"] {
-      --app-shell-gutter: 12px;
-      padding-left: calc(var(--app-shell-gutter) + env(safe-area-inset-left, 0px));
-      padding-right: calc(var(--app-shell-gutter) + env(safe-area-inset-right, 0px));
-    }
-    body[data-device-tier="phone"] #performanceSummary {
-      padding: 16px !important;
-      border-radius: 16px !important;
-    }
-    body[data-device-tier="phone"] .practice-summary-metrics {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-    body[data-device-tier="phone"] .practice-context-grid {
-      grid-template-columns: 1fr;
-    }
-    body[data-device-tier="phone"] #practiceTakeComparisonTitle,
-    body[data-device-tier="phone"] #practiceConfidenceTitle {
-      font-size: 15px !important;
-    }
-    body[data-device-tier="phone"] #practiceNextStepTitle {
-      font-size: 16px !important;
-    }
-    body[data-device-tier="phone"] #practiceNextStepActions > button {
-      flex: 1 1 100%;
-      width: 100%;
-      justify-content: center;
-    }
-    body[data-device-tier="phone"] .history-screen {
-      padding: 16px 12px;
-    }
-    body[data-device-tier="phone"] .history-summary-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-    body[data-device-tier="phone"] .history-table {
-      min-width: 560px;
-    }
-    @media (max-width: 520px) {
-      .history-table {
-        min-width: 0;
-      }
-      .history-table th:nth-child(3),
-      .history-table td:nth-child(3),
-      .history-table th:nth-child(5),
-      .history-table td:nth-child(5) {
-        display: none;
-      }
-      .history-summary-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-    }
-    body[data-device-tier="phone"] .history-table {
-      min-width: 0;
-    }
-    body[data-device-tier="phone"] .history-table th:nth-child(3),
-    body[data-device-tier="phone"] .history-table td:nth-child(3),
-    body[data-device-tier="phone"] .history-table th:nth-child(5),
-    body[data-device-tier="phone"] .history-table td:nth-child(5) {
-      display: none;
-    }
-    body[data-device-tier="phone"] .history-summary-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-    body.score-focus-mode #practiceWeeklyFocusCard,
-    body.score-focus-mode #supporterBanner {
-      display: none !important;
-    }
-    body.score-focus-mode #feedbackDisplay {
-      display: block !important;
-      margin-top: 6px !important;
-      padding: 6px !important;
-      border-radius: 10px !important;
-      background: #fff !important;
-    }
-    body.score-focus-mode #feedbackDisplay > summary {
-      font-size: 12px !important;
-      line-height: 1.2;
-    }
-    body.score-focus-mode #pitchMeter {
-      height: 42px !important;
-    }
-    body.score-focus-mode #scoreDisplay,
-    body.score-focus-mode #justIntonationInfo,
-    body.score-focus-mode #harmonyDisplay {
-      display: none !important;
-    }
-    body.score-focus-mode #tempoSlider {
-      display: none !important;
-    }
-    body.score-focus-mode #scoreContainer {
-      height: 82vh;
-      padding: 10px;
-      border-radius: 18px;
-      border-color: #cbd5e1;
-      background: linear-gradient(180deg, #f8fbff 0%, #eef4ff 100%);
-      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
-    }
-    body.score-focus-mode #scoreToolbar {
-      background: rgba(255,255,255,0.98) !important;
-      border-bottom-color: #dbe4f0 !important;
-      border-radius: 12px;
-      margin-bottom: 8px;
-      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
-    }
-    body.score-focus-mode #loopControls,
-    body.score-focus-mode #performanceExcerptCard {
-      margin-top: 6px;
-    }
-    @media (max-width: 767px) {
-      body.score-focus-mode #scoreContainer {
-        height: 84vh;
-        padding: 8px;
-        border-radius: 16px;
-      }
-      body.score-focus-mode #feedbackDisplay {
-        position: fixed !important;
-        left: calc(env(safe-area-inset-left, 0px) + var(--app-shell-gutter) + 4px);
-        right: calc(env(safe-area-inset-right, 0px) + var(--app-shell-gutter) + 4px);
-        bottom: calc(var(--bottom-ad-space) + env(safe-area-inset-bottom, 0px) + 68px);
-        z-index: 88;
-        margin: 0 !important;
-        border: 1px solid #bfdbfe !important;
-        box-shadow: 0 12px 30px rgba(15,23,42,0.2) !important;
-      }
-      body.score-focus-mode.performance-summary-visible #feedbackDisplay {
-        display: none !important;
-      }
-    }
-    body.score-performance-mode #scoreContainer {
-      height: 74vh;
-      padding: 10px;
-      border-radius: 18px;
-      border-color: #cbd5e1;
-      background: linear-gradient(180deg, #f8fbff 0%, #eef4ff 100%);
-      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
-    }
-    body.score-performance-mode #scoreToolbar {
-      background: rgba(15, 23, 42, 0.88) !important;
-      border-bottom-color: rgba(148, 163, 184, 0.3) !important;
-      border-radius: 12px;
-      margin-bottom: 8px;
-    }
-    body.score-performance-mode #scoreToolbar #transposeLabel,
-    body.score-performance-mode #scoreToolbar #scoreZoomLabel {
-      color: #e2e8f0 !important;
-    }
-    body.score-performance-mode #scoreToolbar #notationLabel {
-      background: #1d4ed8 !important;
-    }
-    body.score-performance-mode #scoreToolbar .view-btn.active,
-    body.score-performance-mode #scoreToolbar .focus-btn.active {
-      background: #1d4ed8;
-      color: #fff;
-      border-color: #1d4ed8;
-    }
-    body.score-performance-mode #feedbackDisplay {
-      display: none;
-    }
-    body.score-performance-mode #loopControls {
-      background: linear-gradient(135deg, #eff6ff, #f8fafc);
-      border-color: #93c5fd;
-    }
-    body.score-performance-mode #performanceExcerptCard {
-      border-color: #93c5fd !important;
-      background: linear-gradient(135deg, #eff6ff, #f8fafc) !important;
-      box-shadow: 0 12px 28px rgba(37, 99, 235, 0.08);
-    }
-    body.score-performance-mode #annotationToolbar {
-      display: none !important;
-    }
-    @media (max-width: 767px) {
-      body.score-performance-mode #scoreContainer {
-        height: 78vh;
-        padding: 8px;
-        border-radius: 16px;
-      }
-    }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="音程ポリス (Pitch Patrol) の公式サイト。吹奏楽やクラシック学習者向けの ear-training app として、App Store 情報、サポート、FAQ、プライバシーポリシーをまとめています。">
+  <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
+  <meta name="keywords" content="音程ポリス,Pitch Patrol,イヤートレーニング,ear training,吹奏楽,クラシック,音感,ピッチ,チューニング,intonation">
+  <meta name="apple-itunes-app" content="app-id=6766211805">
+  <meta property="og:site_name" content="音程ポリス | Pitch Patrol">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="音程ポリス | Pitch Patrol">
+  <meta property="og:description" content="吹奏楽やクラシック学習者向けの ear-training app、音程ポリス (Pitch Patrol) の公式サイトです。App Store 情報、サポート、FAQ、プライバシーポリシーをまとめています。">
+  <meta property="og:url" content="https://musicapp-lab.github.io/">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="音程ポリス | Pitch Patrol">
+  <meta name="twitter:description" content="吹奏楽やクラシック学習者向けの ear-training app、音程ポリス (Pitch Patrol) の公式サイトです。">
+  <link rel="canonical" href="https://musicapp-lab.github.io/">
+  <title>音程ポリス | Pitch Patrol</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Noto+Sans+JP:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "MobileApplication",
+    "name": "音程ポリス",
+    "alternateName": "Pitch Patrol",
+    "url": "https://musicapp-lab.github.io/",
+    "description": "吹奏楽やクラシック学習者向けの ear-training app。2 音の高低、スケールのずれ、和音のずれを短い反復で確認できます。",
+    "applicationCategory": "MusicApplication",
+    "operatingSystem": "iOS",
+    "inLanguage": ["ja", "en"],
+    "isAccessibleForFree": true,
+    "downloadUrl": "https://apps.apple.com/jp/app/%E9%9F%B3%E7%A8%8B%E3%83%9D%E3%83%AA%E3%82%B9/id6766211805",
+    "publisher": {
+      "@type": "Person",
+      "name": "Yuji Ozawa"
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "JPY"
+    },
+    "featureList": [
+      "2 音の高低トレーニング",
+      "スケール異常トレーニング",
+      "和音異常トレーニング",
+      "楽器ごとの実用音域寄せ",
+      "A4 基準ヘルツ調整",
+      "ローカル履歴",
+      "テスト結果共有"
+    ]
+  }
+  </script>
 </head>
 <body>
-  <!-- Navigation Bar -->
-  <nav id="navbar">
-    <button class="nav-btn active" data-route="practice" onclick="window.router && window.router.navigate('practice')">
-      <span data-i18n="navPractice">Practice</span>
-    </button>
-    <button class="nav-btn" data-route="library" onclick="window.router && window.router.navigate('library')">
-      <span data-i18n="navLibrary">Library</span>
-    </button>
-    <button class="nav-btn" data-route="assessment" onclick="window.router && window.router.navigate('assessment')">
-      <span data-i18n="navAssessment">Assess</span>
-    </button>
-    <button class="nav-btn" data-route="recordings" onclick="window.router && window.router.navigate('recordings')">
-      <span data-i18n="navRecordings">Recordings</span>
-    </button>
-    <button class="nav-btn" data-route="history" onclick="window.router && window.router.navigate('history')">
-      <span data-i18n="navHistory">History</span>
-    </button>
-    <button class="nav-btn" data-route="settings" onclick="window.router && window.router.navigate('settings')">
-      <span data-i18n="navSettings">Settings</span>
-    </button>
-  </nav>
-  <div id="navbarSpacer" aria-hidden="true"></div>
+  <div class="site-shell">
+    <header class="topbar">
+      <a class="brand" href="./index.html">
+        <span class="brand-mark">PP</span>
+        <span>音程ポリス</span>
+      </a>
+      <nav class="nav">
+        <a href="./faq.html">FAQ</a>
+        <a href="./support.html">Support</a>
+        <a href="./privacy.html">Privacy</a>
+        <a href="./brass-practice/">Brass Practice</a>
+      </nav>
+    </header>
 
-  <!-- App Container (SPA) -->
-  <div id="appContainer"></div>
+    <main>
+      <section class="hero">
+        <p class="eyebrow">Pitch Patrol</p>
+        <div class="hero-grid">
+          <div>
+            <h1>毎日 5 分で、音程の違和感を追いかける。</h1>
+            <p class="lede">音程ポリス (Pitch Patrol) は、吹奏楽やクラシックの学習者向けのイヤートレーニングアプリです。2 音の高低、スケールのずれ、和音のずれを、短い反復で毎日確認できます。</p>
+            <p class="muted">Pitch Patrol is an ear-training app for young classical and concert-band players. It focuses on short, repeatable drills for interval direction, scale anomalies, and chord anomalies.</p>
+            <div class="cta-row">
+              <a class="button" href="https://apps.apple.com/jp/app/%E9%9F%B3%E7%A8%8B%E3%83%9D%E3%83%AA%E3%82%B9/id6766211805">App Store</a>
+              <a class="button" href="./support.html">サポートを見る</a>
+              <a class="button-secondary" href="./privacy.html">プライバシーポリシー</a>
+              <a class="button-secondary" href="./faq.html">FAQ</a>
+            </div>
+            <p class="top-note">アプリ情報、サポート、FAQ、プライバシーポリシーをこのページから確認できます。</p>
+            <p class="top-note">This page brings together the app overview, support, FAQ, and privacy policy.</p>
+          </div>
 
-  <!-- Original Content (will be moved to Practice screen) -->
-  <div id="originalContentWrapper" style="display:none;">
-    <!-- Hidden file input/load for programmatic use -->
-    <input id="fileInput" type="file" accept=".musicxml,.xml,.mxl,.mid,.midi" style="display:none" />
-    <button id="loadSample" style="display:none">Load sample</button>
-
-    <div id="controls">
-    <!-- Row 1: Play + Tempo + Status -->
-    <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
-      <button id="playPause" data-i18n="play" style="padding:8px 16px; font-size:15px; font-weight:bold;">Play</button>
-      <button id="playReset" data-i18n="restartFromBeginning" style="padding:8px 12px; font-size:14px;">Start Over</button>
-      <button id="recordBtn" data-i18n="recordOffButton" style="padding:8px 12px; font-size:15px; font-weight:800; background-color: #f44336; color: white; border: none; border-radius: 4px;">Recording: Off</button>
-      <button id="practiceGuideToggle" type="button" class="practice-guide-button" aria-expanded="false" aria-controls="practiceGuidePanel" aria-label="Practice guide" title="Practice guide">?</button>
-      <div id="tempoControl" style="display:flex; align-items:center; gap:3px;">
-        <button id="tempoDown5" class="tempo-btn tempo-btn-large" title="-5">-5</button>
-        <button id="tempoDown1" class="tempo-btn" title="-1">-1</button>
-        <input id="tempo" type="number" value="90" min="40" max="240" style="width:48px; text-align:center; font-size:15px; font-weight:bold; padding:5px 2px; border:1px solid #ccc; border-radius:4px;" />
-        <button id="tempoUp1" class="tempo-btn" title="+1">+1</button>
-        <button id="tempoUp5" class="tempo-btn tempo-btn-large" title="+5">+5</button>
-      </div>
-      <label class="toggle-switch" style="margin:0;">
-        <input id="practiceMode" type="checkbox"/>
-        <span class="toggle-track"></span>
-        <span class="toggle-label" id="practiceModeLabel" data-i18n="practiceModeToggle" style="font-size:12px;">Scoring</span>
-      </label>
-      <button id="newPracticeChallengeBtn" data-i18n="newChallenge" style="display:none; padding: 4px 8px; font-size: 12px; background-color: #9C27B0; color: white; border: none; border-radius: 4px; margin-left: 4px;">New Challenge</button>
-      <label class="toggle-switch" style="margin:0 0 0 8px;">
-        <input id="metronomeToggle" type="checkbox"/>
-        <span class="toggle-track"></span>
-        <span class="toggle-label" id="metronomeLabel" data-i18n="metronome" style="font-size:12px;">Metronome</span>
-      </label>
-      <label class="toggle-switch" style="margin:0 0 0 8px;" title="Playback sound">
-        <input id="practicePlaybackToggle" type="checkbox"/>
-        <span class="toggle-track"></span>
-        <span class="toggle-label" id="practicePlaybackToggleLabel" style="font-size:12px;">Playback on</span>
-      </label>
-      <span id="micStatus" aria-hidden="true" style="display:none; color:#666; font-size:12px; font-weight:bold;"></span>
-      <span id="status" data-i18n="idle" style="font-size:12px;">idle</span>
-    </div>
-    <div id="practiceGuidePanel" class="practice-guide-panel" role="region" aria-labelledby="practiceGuideTitle">
-      <div class="practice-guide-header">
-        <div class="practice-guide-title">
-          <span data-i18n="practiceGuideEyebrow">Quick guide</span>
-          <strong id="practiceGuideTitle" data-i18n="practiceGuideTitle">What the practice buttons do</strong>
+          <aside class="hero-side stack">
+            <div>
+              <p class="kicker">Current release</p>
+              <h3>広告オンリー配布</h3>
+              <ul class="mini-list">
+                <li>rewarded ad 中心、定期購入なし</li>
+                <li>アカウント作成なし、履歴は端末内保存</li>
+                <li>MusicXML は現行 build では端末内処理</li>
+              </ul>
+              <p class="top-note">Ad-only release with rewarded ads, no subscription, local history, and on-device MusicXML handling in the current build.</p>
+            </div>
+            <div>
+              <p class="kicker">Quick links</p>
+              <ul class="mini-list">
+                <li><a href="./support.html">Support</a></li>
+                <li><a href="./privacy.html">Privacy Policy</a></li>
+                <li><a href="./faq.html">FAQ</a></li>
+                <li><a href="./brass-practice/">Brass Practice</a></li>
+              </ul>
+            </div>
+            <div class="fine-print">困ったときは Support と FAQ から確認できます。You can start with Support or FAQ when you need help.</div>
+          </aside>
         </div>
-        <button id="practiceGuideClose" type="button" class="practice-guide-close" aria-label="Close">x</button>
-      </div>
-      <div class="practice-guide-grid">
-        <div class="practice-guide-item"><span class="practice-guide-key" data-i18n="play">Play</span><span class="practice-guide-copy"><strong data-i18n="practiceGuidePlayTitle">Play / pause</strong><span data-i18n="practiceGuidePlayBody">Starts the backing sound and listens for your pitch when scoring is available.</span></span></div>
-        <div class="practice-guide-item"><span class="practice-guide-key" data-i18n="restartFromBeginning">Start Over</span><span class="practice-guide-copy"><strong data-i18n="practiceGuideResetTitle">Reset position</strong><span data-i18n="practiceGuideResetBody">Returns the cursor to the beginning of the piece or selected section.</span></span></div>
-        <div class="practice-guide-item"><span class="practice-guide-key" data-i18n="record">Record</span><span class="practice-guide-copy"><strong data-i18n="practiceGuideRecordTitle">Save a take</strong><span data-i18n="practiceGuideRecordBody">Arms audio recording for the next playback so you can review it later.</span></span></div>
-        <div class="practice-guide-item"><span class="practice-guide-key" data-i18n="tempo">Tempo</span><span class="practice-guide-copy"><strong data-i18n="practiceGuideTempoTitle">Speed</strong><span data-i18n="practiceGuideTempoBody">Use -/+ buttons or the slider to slow down or speed up playback.</span></span></div>
-        <div class="practice-guide-item"><span class="practice-guide-key" data-i18n="metronome">Metronome</span><span class="practice-guide-copy"><strong data-i18n="practiceGuideMetronomeTitle">Pulse support</strong><span data-i18n="practiceGuideMetronomeBody">Adds a click so entries and releases can be checked against a steady beat.</span></span></div>
-        <div class="practice-guide-item"><span class="practice-guide-key" data-i18n="practiceModeToggle">Scoring</span><span class="practice-guide-copy"><strong data-i18n="practiceGuideChallengeTitle">Scoring</strong><span data-i18n="practiceGuideChallengeBody">Turns mic scoring on. If 7-minute access is inactive, a reward ad is requested when you turn it on.</span></span></div>
-        <div class="practice-guide-item"><span class="practice-guide-key" data-i18n="practicePlaybackToggleOn">Playback</span><span class="practice-guide-copy"><strong data-i18n="practiceGuidePlaybackTitle">Reference sound</strong><span data-i18n="practiceGuidePlaybackBody">Turns the guide sound on or off while keeping the score visible.</span></span></div>
-        <div class="practice-guide-item"><span class="practice-guide-key" data-i18n="notationInBb">In Bb</span><span class="practice-guide-copy"><strong data-i18n="practiceGuideTransposeTitle">Notation key</strong><span data-i18n="practiceGuideTransposeBody">Shows the selected part notation and lets you nudge display transposition by semitone.</span></span></div>
-        <div class="practice-guide-item"><span class="practice-guide-key" data-i18n="focusMode">Focus</span><span class="practice-guide-copy"><strong data-i18n="practiceGuideFocusTitle">Clean score view</strong><span data-i18n="practiceGuideFocusBody">Hides extra panels and gives the score more room on small screens.</span></span></div>
-        <div class="practice-guide-item"><span class="practice-guide-key" data-i18n="scrollView">Scroll</span><span class="practice-guide-copy"><strong data-i18n="practiceGuideViewTitle">Score view</strong><span data-i18n="practiceGuideViewBody">Scroll, page, and performance views change how much of the score stays on screen.</span></span></div>
-        <div class="practice-guide-item"><span class="practice-guide-key" data-i18n="section">Section</span><span class="practice-guide-copy"><strong data-i18n="practiceGuideSectionTitle">Loop measures</strong><span data-i18n="practiceGuideSectionBody">Set start/end measures and repeat only the phrase you want to fix.</span></span></div>
-        <div class="practice-guide-item"><span class="practice-guide-key">8va</span><span class="practice-guide-copy"><strong data-i18n="practiceGuideOctaveTitle">Display octave</strong><span data-i18n="practiceGuideOctaveBody">Moves the notation octave for easier reading without changing your target part.</span></span></div>
-        <div class="practice-guide-item"><span class="practice-guide-key">+ / -</span><span class="practice-guide-copy"><strong data-i18n="practiceGuideZoomTitle">Score size</strong><span data-i18n="practiceGuideZoomBody">Zooms the score in or out without changing the pitch target.</span></span></div>
-        <div class="practice-guide-item"><span class="practice-guide-key" data-i18n="feedback">Feedback</span><span class="practice-guide-copy"><strong data-i18n="practiceGuideFeedbackTitle">Live feedback</strong><span data-i18n="practiceGuideFeedbackBody">The meter and note labels show pitch center, scoring, and confidence while you play.</span></span></div>
-        <div class="practice-guide-item"><span class="practice-guide-key" data-i18n="draw">Draw</span><span class="practice-guide-copy"><strong data-i18n="practiceGuideDrawTitle">Score marks</strong><span data-i18n="practiceGuideDrawBody">Use draw, color, and clear for temporary practice marks on the score.</span></span></div>
-        <div class="practice-guide-item"><span class="practice-guide-key" data-i18n="partSettings">Parts</span><span class="practice-guide-copy"><strong data-i18n="practiceGuidePartsTitle">Multi-part scores</strong><span data-i18n="practiceGuidePartsBody">Choose which part is scored and which parts remain as accompaniment when a score has multiple parts.</span></span></div>
-      </div>
-    </div>
-    <div id="supporterBanner" style="display:none; margin-top:6px; padding:8px 10px; border-radius:8px; background:linear-gradient(135deg,#ecfeff,#eff6ff); border:1px solid #bae6fd; color:#0f172a; font-size:12px; line-height:1.5;"></div>
-    <input id="progress" type="range" min="0" max="100" value="0" style="display:none" />
-    <span id="instrumentStatus" style="display:none">(no instrument)</span>
-    <input id="tempoSlider" type="range" min="40" max="240" value="90" style="width:100%; accent-color:#0066cc;" />
+      </section>
 
-    <!-- Row 2: Parts (only visible for multi-part scores) -->
-    <div id="partsRow" style="display:none; flex-direction:column; gap:6px; padding:8px; background:#f0f0f0; border-radius:4px;">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
-        <strong style="font-size:13px;" data-i18n="partSettings">Part Settings</strong>
-        <button id="applyParts" style="padding:4px 10px; background:#0066cc; color:white; border:none; cursor:pointer; border-radius:3px; font-size:13px;" data-i18n="apply">Apply</button>
-      </div>
-      <table id="partsTable" style="width:100%; border-collapse:collapse; font-size:13px;">
-        <thead>
-          <tr style="border-bottom:1px solid #ccc;">
-            <th style="padding:4px; text-align:left;" data-i18n="partName">Part Name</th>
-            <th style="padding:4px; text-align:center;" data-i18n="soloForScoring">Solo (for scoring)</th>
-            <th style="padding:4px; text-align:center;" data-i18n="playAccompaniment">Play (accompaniment)</th>
-          </tr>
-        </thead>
-        <tbody id="partsListContainer">
-          <!-- Part rows will be inserted here by app.js -->
-        </tbody>
-      </table>
-    </div>
+      <section class="panel">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">What It Does</p>
+            <h2>トレーニングの中身 / What It Does</h2>
+          </div>
+          <p class="muted">band / classical learners 向けに狙いを絞った ear-training</p>
+        </div>
+        <div class="feature-grid">
+          <article class="feature-card">
+            <span class="feature-tag">Direction</span>
+            <h3>2 音の高低 / Interval direction</h3>
+            <p>2 つ目の音が高いか低いかを短く反復して確認します。音程の方向感を毎日少しずつ固めるための基本メニューです。</p>
+            <p class="muted">Short two-note drills that train whether the second note sounds higher or lower.</p>
+          </article>
+          <article class="feature-card">
+            <span class="feature-tag">Scale</span>
+            <h3>スケール異常 / Scale anomalies</h3>
+            <p>スケールの中でずれた 1 音を見つけます。音階の中での違和感を拾う耳を育てる練習です。</p>
+            <p class="muted">Find the one note that sounds out of place inside a scale pattern.</p>
+          </article>
+          <article class="feature-card">
+            <span class="feature-tag">Chord</span>
+            <h3>和音異常 / Chord anomalies</h3>
+            <p>和音の中で低くずれた音を見つけます。合奏での濁りに気づく感覚を鍛える目的のメニューです。</p>
+            <p class="muted">Listen for the note that sags low inside a chord and learn to catch blend problems earlier.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Key Features</p>
+            <h2>公開ページで案内する要点 / Key features</h2>
+          </div>
+        </div>
+        <ul class="pill-list">
+          <li>楽器ごとの実用音域寄せ / Instrument-aware practical ranges</li>
+          <li>A4 基準ヘルツ調整 / Adjustable A4 reference pitch</li>
+          <li>ローカル履歴と短い結果共有 / Local history and lightweight result sharing</li>
+          <li>広告解除 window は 7 分共通 / One rewarded unlock covers a shared 7-minute window</li>
+        </ul>
+      </section>
+
+      <section class="panel">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Public Info</p>
+            <h2>公開情報 / Public info</h2>
+          </div>
+        </div>
+        <div class="panel-grid">
+          <article class="info-card">
+            <h3>App Store</h3>
+            <p>App Store から現在の配布ページを確認できます。</p>
+            <p class="muted">Open the current App Store listing from here.</p>
+          </article>
+          <article class="info-card">
+            <h3>Support</h3>
+            <p>広告挙動や問い合わせ時に必要な情報を公開サポートページにまとめています。</p>
+            <p class="muted">The support page explains ad behavior and what to include in a support request.</p>
+          </article>
+          <article class="info-card">
+            <h3>Privacy Policy</h3>
+            <p>現行 build のデータ取扱いと広告 SDK の扱いをプライバシーポリシーで確認できます。</p>
+            <p class="muted">The privacy page explains local data handling and the ad SDK used in the current release.</p>
+          </article>
+          <article class="info-card">
+            <h3>FAQ</h3>
+            <p>広告確認のタイミングや履歴削除など、よくある質問をまとめています。</p>
+            <p class="muted">The FAQ covers common questions such as ad timing and deleting local history.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">App Facts</p>
+            <h2>検索と AI が拾いやすい基本情報 / Core app facts</h2>
+          </div>
+        </div>
+        <ul class="pill-list">
+          <li>App name: 音程ポリス / Pitch Patrol</li>
+          <li>Platform: iOS</li>
+          <li>Category: ear training / music education</li>
+          <li>Audience: concert band and classical learners</li>
+          <li>Pricing: free ad-supported release</li>
+          <li>Developer: Yuji Ozawa</li>
+        </ul>
+      </section>
+
+      <section class="panel">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Contact</p>
+            <h2>公開連絡先 / Contact</h2>
+          </div>
+        </div>
+        <p>問い合わせは公開サポートメールへ送れます。バグ報告では、端末名、iOS バージョン、build 番号、再現手順、可能ならスクリーンショットを含めてください。</p>
+        <p class="muted">For support, email the public address below and include your device model, iOS version, build number, reproduction steps, and a screenshot if possible.</p>
+        <div class="contact-strip">
+          <a href="mailto:pitchpatrolapp@gmail.com">pitchpatrolapp@gmail.com</a>
+          <span>App Store / TestFlight build info recommended</span>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Related App</p>
+            <h2>Brass Practice</h2>
+          </div>
+        </div>
+        <p>金管奏者向けの譜面練習、再生、録音、採点サポートをまとめた別アプリの公開ページです。</p>
+        <p class="muted">Brass Practice is a separate app for brass players, focused on score-based practice, playback, recording, and optional scoring support.</p>
+        <div class="cta-row">
+          <a class="button" href="./brass-practice/">Brass Practice を見る</a>
+          <a class="button-secondary" href="./brass-practice/support.html">Support</a>
+          <a class="button-secondary" href="./brass-practice/privacy.html">Privacy</a>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <p>音程ポリス (Pitch Patrol) public developer page</p>
+      </footer>
+    </main>
   </div>
-
-  <!-- Score Container (top priority on mobile) -->
-  <div id="scoreContainer">
-    <div id="scoreToolbar" style="position:sticky; top:0; z-index:10; display:flex; align-items:center; gap:4px; padding:2px 4px; background:rgba(255,255,255,0.9); border-bottom:1px solid #eee;">
-      <!-- Notation label -->
-      <span id="notationLabel" data-i18n="notationInBb" style="font-size:11px; color:#fff; background:#6a5acd; padding:1px 6px; border-radius:3px; white-space:nowrap;">In Bb</span>
-      <!-- Transpose controls -->
-      <button id="transposeDown" style="width:22px; height:22px; padding:0; font-size:13px; font-weight:bold; cursor:pointer; border:1px solid #ccc; border-radius:3px; background:#f5f5f5;" title="Transpose down">-</button>
-      <span id="transposeLabel" style="font-size:11px; color:#666; min-width:16px; text-align:center;">0</span>
-      <button id="transposeUp" style="width:22px; height:22px; padding:0; font-size:13px; font-weight:bold; cursor:pointer; border:1px solid #ccc; border-radius:3px; background:#f5f5f5;" title="Transpose up">+</button>
-      <button id="octaveDown" style="width:30px; height:22px; padding:0; font-size:10px; font-weight:bold; cursor:pointer; border:1px solid #ccc; border-radius:3px; background:#f5f5f5;" title="Octave down">8vb</button>
-      <span id="octaveLabel" style="font-size:11px; color:#666; min-width:32px; text-align:center;">0</span>
-      <button id="octaveUp" style="width:30px; height:22px; padding:0; font-size:10px; font-weight:bold; cursor:pointer; border:1px solid #ccc; border-radius:3px; background:#f5f5f5;" title="Octave up">8va</button>
-      <div style="flex:1;"></div>
-      <button id="scoreFocusToggle" data-i18n="focusMode" class="focus-btn" title="Hide extra panels and enlarge the score on phones">Focus</button>
-      <!-- View Mode Controls -->
-      <div id="viewControls" style="display:flex; border: 1px solid #ccc; border-radius: 4px; margin-right: 8px;">
-        <button id="viewScrollBtn" data-i18n="scrollView" class="view-btn" title="Scroll View">Scroll</button>
-        <button id="viewPageBtn" data-i18n="pageView" class="view-btn" title="Page View">Page</button>
-        <button id="viewPerformanceBtn" data-i18n="performanceView" class="view-btn" title="Performance View">Perform</button>
-      </div>
-      <!-- Zoom controls -->
-      <button id="scoreZoomOut" style="width:24px; height:24px; padding:0; font-size:14px; font-weight:bold; cursor:pointer; border:1px solid #ccc; border-radius:3px; background:#f5f5f5;">-</button>
-      <span id="scoreZoomLabel" style="font-size:11px; color:#666; line-height:24px; min-width:30px; text-align:center;">50%</span>
-      <button id="scoreZoomIn" style="width:24px; height:24px; padding:0; font-size:14px; font-weight:bold; cursor:pointer; border:1px solid #ccc; border-radius:3px; background:#f5f5f5;">+</button>
-    </div>
-    <div id="score"></div>
-    <div id="playhead" style="display:none; position:absolute; left:0; top:0; bottom:0; width:3px; background:rgba(255,0,0,0.9); pointer-events:none; box-shadow: 0 0 8px rgba(255,0,0,0.8); z-index:9999;"></div>
-    <div id="noteOverlay" style="position:absolute; left:0; right:0; top:0; bottom:0; pointer-events:none;"></div>
-    <canvas id="annotationCanvas" style="position:absolute; top:0; left:0; pointer-events:none;"></canvas>
-    <div id="annotationToolbar" style="position:absolute; bottom:0; left: 50%; transform: translateX(-50%); z-index:20; display:flex; gap: 8px; padding: 6px; background: rgba(240, 240, 240, 0.9); border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-      <button id="drawToggleBtn" data-i18n="draw" class="tool-btn active" title="Draw/Erase">Draw</button>
-      <input type="color" id="colorPicker" value="#FF0000" title="Color Picker">
-      <button id="clearAnnotationsBtn" data-i18n="clear" class="tool-btn" title="Clear All">Clear</button>
-    </div>
-  </div>
-
-  <!-- Section Selection (collapsible) -->
-  <details id="loopControls" style="margin-top:8px; padding:6px; background:#fff8dc; border:1px solid #daa520; border-radius:4px;">
-    <summary data-i18n="section" style="cursor:pointer; font-weight:bold; font-size:13px; color:#996600;">Section</summary>
-    <div style="display:flex; align-items:center; flex-wrap:wrap; gap:6px; margin-top:6px;">
-      <label style="display:flex; align-items:center; gap:3px; font-size:13px;">
-        <span data-i18n="start">Start</span>:
-        <input id="loopStartMeasure" type="number" min="1" placeholder="1" style="width:45px; padding:2px 4px;"/>
-      </label>
-      <label style="display:flex; align-items:center; gap:3px; font-size:13px;">
-        <span data-i18n="end">End</span>:
-        <input id="loopEndMeasure" type="number" min="1" placeholder="" style="width:45px; padding:2px 4px;"/>
-      </label>
-      <button id="setLoopMeasures" data-i18n="set" style="padding:3px 8px; background:#9C27B0; color:white; border:none; cursor:pointer; border-radius:3px; font-size:12px;">Set</button>
-      <button id="clearLoop" data-i18n="clear" style="padding:3px 8px; background:#f44336; color:white; border:none; cursor:pointer; border-radius:3px; font-size:12px;">Clear</button>
-      <label class="toggle-switch" style="margin-left: 8px;">
-        <input id="loopToggle" type="checkbox"/>
-        <span class="toggle-track"></span>
-        <span class="toggle-label" data-i18n="repeat" style="font-size: 13px;">Repeat</span>
-      </label>
-      <span id="measureRange" style="color:#666; font-size:11px;"></span>
-      <span id="loopStatus" style="color:#666; font-weight:bold; font-size:12px;"></span>
-    </div>
-  </details>
-  <div id="performanceExcerptCard" style="display:none; margin-top:8px; padding:12px 14px; border-radius:12px; background:linear-gradient(135deg,#eff6ff,#f8fafc); border:1px solid #bfdbfe;">
-    <div data-i18n="performanceExcerptLabel" style="font-size:11px; font-weight:800; letter-spacing:0.04em; text-transform:uppercase; color:#1d4ed8;">Excerpt</div>
-    <div id="performanceExcerptBody" style="margin-top:8px; font-size:13px; line-height:1.6; color:#334155;">Select a section to open a focused performance view.</div>
-    <div id="performanceExcerptMeta" class="practice-chip-row" style="margin-top:10px;"></div>
-    <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:12px;">
-      <button id="performanceExcerptOpen" data-i18n="performanceExcerptOpen" style="padding:9px 14px; border:none; border-radius:999px; background:#1d4ed8; color:#fff; font-weight:700; cursor:pointer;">Open in Performance View</button>
-      <button id="performanceExcerptPlay" data-i18n="performanceExcerptPlay" style="padding:9px 14px; border:1px solid #bfdbfe; border-radius:999px; background:#fff; color:#1d4ed8; font-weight:700; cursor:pointer;">Play Section</button>
-    </div>
-  </div>
-
-  <div id="recordingsContentWrapper" style="display:none;">
-    <div id="recordingsPanel" style="display:grid; gap:10px;">
-      <div id="latestRecordingPanel" style="padding:10px 12px; border:1px solid #dbe4f0; border-radius:12px; background:#f8fafc;">
-        <div data-i18n="recordLatestTitle" style="font-size:12px; font-weight:800; color:#0f172a;">Latest Recording</div>
-        <div id="latestRecordingCard" style="display:grid; gap:6px; margin-top:8px; font-size:12px;"></div>
-      </div>
-      <div id="savedRecordingsPanel" style="padding:10px 12px; border:1px solid #dbe4f0; border-radius:12px; background:#fff;">
-        <div data-i18n="recordSavedListTitle" style="font-size:12px; font-weight:800; color:#0f172a;">Saved Recordings</div>
-        <div id="recordingsList" style="display:flex; flex-direction:column; gap:6px; font-size:12px; margin-top:8px;"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Real-time Feedback (collapsible, compact) -->
-  <details id="feedbackDisplay" open style="margin-top:8px; padding:8px; background:#fafafa; border:1px solid #ddd; border-radius:4px;">
-    <summary data-i18n="feedback" style="cursor:pointer; font-weight:bold; font-size:13px;">Feedback</summary>
-    <div style="margin-top:8px;">
-      <canvas id="pitchMeter" width="300" height="50" style="border:1px solid #ccc; width:100%; display:block;"></canvas>
-      <div id="challengeModeHint" data-i18n="challengeModeNoScore" style="display:none; margin-top:8px; padding:8px 10px; border-radius:8px; background:#fff7ed; border:1px solid #fdba74; color:#9a3412; font-size:12px; font-weight:700;">
-        Scoring is off. Playback and recording are still available.
-      </div>
-      <div id="scoreDisplay" style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-top:6px; font-size:13px;">
-        <span><span data-i18n="score">Score</span>: <strong id="currentScore" style="font-size:24px; color:#0066cc;">0</strong></span>
-        <span><span data-i18n="accuracy">Accuracy</span>: <strong id="accuracyPercent">--</strong></span>
-        <span><span data-i18n="noteLabel">Note</span>: <strong id="currentNote" style="color:#666;">--</strong></span>
-      </div>
-      <div id="justIntonationInfo" style="display:none; margin-top:6px; padding:4px; background:#fff8dc; border:1px solid #daa520; border-radius:3px; font-size:11px;">
-        <span style="font-weight:bold; color:#0066cc;">JI</span>
-        <span data-i18n="target">Target</span>: <strong id="justTarget">--</strong> |
-        <span data-i18n="deviation">Deviation</span>: <strong id="justDeviation">--</strong>
-      </div>
-      <div id="harmonyDisplay" style="margin-top:6px; padding:4px; font-size:12px; color:#333; background:#f0f8ff; border:1px solid #cce0ff; border-radius:3px;">
-        <span><span data-i18n="currentChord">Current Chord</span>: <strong id="currentChord">--</strong></span> | 
-        <span><span data-i18n="next">Next</span>: <strong id="nextChord">--</strong></span>
-      </div>
-    </div>
-  </details>
-
-  <!-- Karaoke Controls (hidden - practice mode moved to row 1) -->
-  <div id="karaokeControls" style="display:none;"></div>
-
-  <div id="performanceSummary" style="display:none; margin-top:20px; padding:20px;">
-    <h3 data-i18n="performanceSummary" style="margin:0 0 16px 0; color:#0066cc;">Performance Summary</h3>
-    <div class="practice-summary-metrics" style="margin-bottom:20px;">
-      <div class="practice-summary-card">
-        <div style="font-size:14px; color:#666;" data-i18n="overallScoreLabel">Overall Score</div>
-        <div><strong id="finalScore" style="font-size:48px; color:#0066cc;">0</strong><span style="font-size:24px; color:#999;">/100</span></div>
-      </div>
-      <div class="practice-summary-card">
-        <div style="font-size:14px; color:#666;" data-i18n="notesPlayedLabel">Notes Played</div>
-        <div style="font-size:24px;"><strong id="notesPlayed">0</strong> / <strong id="totalNotes">0</strong></div>
-      </div>
-      <div class="practice-summary-card">
-        <div style="font-size:14px; color:#666;" data-i18n="avgPitchAccuracyLabel">Avg Pitch Accuracy</div>
-        <div style="font-size:24px;"><strong id="avgAccuracy">0</strong> cents</div>
-      </div>
-    </div>
-    <div id="finalOverlayDiagnostics" style="display:none; margin-bottom:16px; padding:10px 12px; border-radius:10px; background:#eff6ff; border:1px solid #bfdbfe; color:#1e3a8a; font-size:12px; line-height:1.6;"></div>
-    <div id="practiceEvaluationNote" style="display:none; margin-bottom:16px; padding:12px 14px; border-radius:12px; background:#fffbeb; border:1px solid #fcd34d; color:#92400e; font-size:13px; line-height:1.6;"></div>
-    <div id="practiceKeyFindings" style="display:none; margin-bottom:16px; padding:14px; border-radius:12px; background:linear-gradient(135deg,#f8fafc,#eff6ff); border:1px solid #cbd5e1;">
-      <div data-i18n="keyFindings" style="font-size:11px; font-weight:800; letter-spacing:0.04em; text-transform:uppercase; color:#334155;">Key Findings</div>
-      <div id="practiceKeyFindingsList" class="practice-chip-row" style="margin-top:10px;"></div>
-    </div>
-    <div id="practiceConfidenceCard" style="display:none; margin-bottom:16px; padding:14px; border-radius:12px; background:linear-gradient(135deg,#fff7ed,#fffbeb); border:1px solid #fdba74;">
-      <div data-i18n="confidenceLabel" style="font-size:11px; font-weight:800; letter-spacing:0.04em; text-transform:uppercase; color:#9a3412;">Scoring Confidence</div>
-      <div id="practiceConfidenceTitle" style="margin-top:8px; font-size:16px; font-weight:800; color:#7c2d12;">Fast notes are reference only</div>
-      <div id="practiceConfidenceBody" style="margin-top:6px; font-size:13px; line-height:1.6; color:#9a3412;">Very short notes are summarized as trends instead of strict scoring.</div>
-      <div id="practiceConfidenceChips" class="practice-chip-row" style="margin-top:10px;"></div>
-    </div>
-    <div id="practiceTakeComparison" style="display:none; margin-bottom:16px; padding:14px; border-radius:12px; background:linear-gradient(135deg,#f0fdf4,#eff6ff); border:1px solid #86efac;">
-      <div data-i18n="takeComparisonLabel" style="font-size:11px; font-weight:800; letter-spacing:0.04em; text-transform:uppercase; color:#15803d;">Take Comparison</div>
-      <div id="practiceTakeComparisonTitle" style="margin-top:8px; font-size:16px; font-weight:800; color:#14532d;">This take improved</div>
-      <div id="practiceTakeComparisonBody" style="margin-top:6px; font-size:13px; line-height:1.6; color:#166534;">Compared with the previous take on this piece, this pass is moving in the right direction.</div>
-      <div id="practiceTakeComparisonChips" class="practice-chip-row" style="margin-top:10px;"></div>
-      <div id="practiceTakeComparisonMiniLabel" data-i18n="takeMiniChartLabel" style="display:none; margin-top:12px; font-size:11px; font-weight:800; letter-spacing:0.04em; text-transform:uppercase; color:#0f766e;">Side-by-Side Mini Chart</div>
-      <div id="practiceTakeComparisonMiniChart" class="practice-mini-chart" style="display:none;"></div>
-      <div id="practiceTakeComparisonFindingsLabel" data-i18n="takeFindingMiniChartLabel" style="display:none; margin-top:12px; font-size:11px; font-weight:800; letter-spacing:0.04em; text-transform:uppercase; color:#15803d;">Finding Mini Chart</div>
-      <div id="practiceTakeComparisonFindingsChart" class="practice-mini-chart" style="display:none;"></div>
-      <div id="practiceTakeComparisonSectionsLabel" data-i18n="takeSectionLabel" style="display:none; margin-top:12px; font-size:11px; font-weight:800; letter-spacing:0.04em; text-transform:uppercase; color:#1d4ed8;">Section Comparison</div>
-      <div id="practiceTakeComparisonSections" class="practice-chip-row" style="margin-top:8px;"></div>
-    </div>
-    <div id="practicePitchTrend" style="display:none; margin-bottom:16px; padding:14px; border-radius:12px; background:linear-gradient(135deg,#fff7ed,#eff6ff); border:1px solid #fdba74;">
-      <div data-i18n="pitchTrendLabel" style="font-size:11px; font-weight:800; letter-spacing:0.04em; text-transform:uppercase; color:#9a3412;">Pitch by Note</div>
-      <div id="practicePitchTrendTitle" data-i18n="pitchTrendTitle" style="margin-top:8px; font-size:16px; font-weight:800; color:#7c2d12;">Signed note tendencies</div>
-      <div id="practicePitchTrendBody" data-i18n="pitchTrendBody" style="margin-top:6px; font-size:13px; line-height:1.6; color:#9a3412;">Repeated notes are summarized as signed average cents for this pass.</div>
-      <div id="practicePitchTrendChips" class="practice-chip-row" style="margin-top:10px;"></div>
-    </div>
-    <div id="practiceCoachAdvice" style="margin-bottom:16px; padding:14px; border-radius:12px; background:linear-gradient(135deg,#fff7ed,#fffbeb); border:1px solid #fed7aa;">
-      <div data-i18n="coachLabel" style="font-size:11px; font-weight:800; letter-spacing:0.04em; text-transform:uppercase; color:#c2410c;">Coach</div>
-      <div id="practiceCoachAdviceBody" style="margin-top:8px; font-size:13px; line-height:1.7; color:#7c2d12;">Keep the next pass short and focused.</div>
-    </div>
-    <div id="practiceShareSummary" style="display:none; margin-bottom:16px; padding:14px; border-radius:12px; background:linear-gradient(135deg,#f8fafc,#f1f5f9); border:1px solid #cbd5e1;">
-      <div data-i18n="shareSummaryLabel" style="font-size:11px; font-weight:800; letter-spacing:0.04em; text-transform:uppercase; color:#334155;">Share Summary</div>
-      <div id="practiceShareSummaryBody" style="margin-top:8px; font-size:13px; line-height:1.6; color:#475569;">Use this short summary for a teacher, lesson note, or your own log.</div>
-      <pre id="practiceShareSummaryText" style="margin:12px 0 0 0; padding:12px; white-space:pre-wrap; background:#fff; border:1px solid #e2e8f0; border-radius:12px; font-size:12px; line-height:1.7; color:#0f172a; font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;"></pre>
-      <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:12px;">
-        <button id="practiceShareSummaryCopy" data-i18n="shareSummaryCopy" style="padding:9px 14px; border:none; border-radius:999px; background:#0f172a; color:#fff; font-weight:700; cursor:pointer;">Copy Summary</button>
-        <button id="practiceShareSummaryShare" data-i18n="shareSummaryShare" style="display:none; padding:9px 14px; border:1px solid #cbd5e1; border-radius:999px; background:#fff; color:#0f172a; font-weight:700; cursor:pointer;">Share</button>
-      </div>
-      <div id="practiceShareSummaryStatus" style="margin-top:8px; font-size:12px; color:#475569;"></div>
-    </div>
-    <div id="practiceNextStep" style="margin-bottom:16px; padding:14px; border-radius:12px; background:linear-gradient(135deg,#eff6ff,#ecfeff); border:1px solid #bfdbfe;">
-      <div data-i18n="nextStep" style="font-size:11px; font-weight:800; letter-spacing:0.04em; text-transform:uppercase; color:#1d4ed8;">Next Step</div>
-      <div id="practiceNextStepTitle" data-i18n="keepStreakMoving" style="margin-top:8px; font-size:18px; font-weight:800; color:#0f172a;">Keep the streak moving</div>
-      <div id="practiceNextStepBody" data-i18n="keepStreakBody" style="margin-top:6px; font-size:13px; line-height:1.6; color:#475569;">Finish one more short block while the embouchure is warm.</div>
-      <div id="practiceNextStepActions">
-        <button id="practiceNextStepAction" data-i18n="openSuggestedPiece" style="padding:9px 14px; border:none; border-radius:999px; background:#1d4ed8; color:#fff; font-weight:700; cursor:pointer; box-shadow:0 8px 18px rgba(29,78,216,0.22);">Open Suggested Piece</button>
-        <button id="practiceRepairStepAction" style="display:none; padding:9px 14px; border:none; border-radius:999px; background:#0f766e; color:#fff; font-weight:700; cursor:pointer; box-shadow:0 8px 18px rgba(15,118,110,0.22);">Open Repair Drill</button>
-        <button id="practiceReturnStepAction" style="display:none; padding:9px 14px; border:1px solid #93c5fd; border-radius:999px; background:#fff; color:#1d4ed8; font-weight:700; cursor:pointer;">Return to Original Piece</button>
-      </div>
-    </div>
-    <h4 style="margin:0 0 8px 0;" data-i18n="performanceOverTimeLabel">Performance Over Time</h4>
-    <canvas id="performanceGraph" width="600" height="200" style="border:1px solid #ccc; max-width:100%; background:#fff;"></canvas>
-    <button id="closePerformanceSummary" data-i18n="close" style="margin-top:12px; background:#666; color:white;">Close</button>
-  </div>
-
-  <style>
-    .highlighted-note path, .highlighted-note circle, .highlighted-note ellipse { fill: yellow !important; stroke: #000 !important; }
-    .note-dot { position:absolute; width:12px; height:12px; background:rgba(255,200,0,0.95); border-radius:50%; transform:translate(-50%,-50%); box-shadow:0 0 8px rgba(0,0,0,0.2); pointer-events:none; }
-
-    /* Karaoke mode note highlighting */
-    .note-correct path, .note-correct circle { fill: #00ff00 !important; stroke: #006600 !important; }
-    .note-close path, .note-close circle { fill: #ffff00 !important; stroke: #666600 !important; }
-    .note-incorrect path, .note-incorrect circle { fill: #ff6666 !important; stroke: #990000 !important; }
-    .note-missed path, .note-missed circle { fill: #cccccc !important; opacity: 0.5; }
-  </style>
-
-  </div> <!-- End originalContentWrapper -->
-
-  <script src="https://cdn.jsdelivr.net/npm/soundfont-player@0.12.0/dist/soundfont-player.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@tonejs/midi@2.0.27/build/Midi.js"></script>
-  <script src="https://unpkg.com/opensheetmusicdisplay@1.9.5/build/opensheetmusicdisplay.min.js"></script>
-
-    <!-- Editable content data -->
-  <script charset="utf-8" src="./editable-content.js"></script>
-  <script charset="utf-8" src="./editable-ui-text.js"></script>
-
-    <!-- i18n and Router -->
-  <script charset="utf-8" src="./i18n.js"></script>
-  <script charset="utf-8" src="./router.js"></script>
-  <script charset="utf-8" src="./library.js"></script>
-  <script charset="utf-8" src="./score-import.js"></script>
-  <script charset="utf-8" src="./screens.js"></script>
-
-  <!-- Transposition -->
-  <script charset="utf-8" src="./transpose.js"></script>
-
-  <!-- Ads -->
-  <script charset="utf-8" src="./release-config.js"></script>
-  <script charset="utf-8" src="./release-config.local.js"></script>
-  <script charset="utf-8" src="./ads.js"></script>
-
-  <!-- Karaoke Mode Modules -->
-  <script charset="utf-8" src="./audio-input.js"></script>
-  <script charset="utf-8" src="./pitch-detector.js"></script>
-  <script charset="utf-8" src="./chord-analyzer.js"></script>
-  <script charset="utf-8" src="./performance-tracker.js"></script>
-  <script charset="utf-8" src="./coach-copy.js"></script>
-  <script charset="utf-8" src="./local-coach.js"></script>
-  <script charset="utf-8" src="./local-coach-native-ios.js"></script>
-  <script charset="utf-8" src="./local-coach-browser-mediapipe.js"></script>
-  <script charset="utf-8" src="./local-coach-browser-demo.js"></script>
-  <script charset="utf-8" src="./karaoke-ui.js"></script>
-
-  <script type="module" src="./app.js"></script>
-  <script charset="utf-8" src="./patch-features.js"></script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
